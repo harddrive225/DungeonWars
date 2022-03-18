@@ -1,0 +1,1252 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+</head>
+<body>
+
+<div id="popUp" style="position: fixed;">
+	Level Creator for Dungeon Wars<br><br>
+	<button id="new" onclick="menu.startNew();">Start New Level</button>
+	<button id="load" onclick="state.load();">Load Existing Level</button>
+</div>
+<div id="UI">
+	<div id="lvlName">
+		Level Creator
+	</div>
+	<p id="action" style="width: 100%; padding: 0; margin: 0; background: azure; height: 20;">Action: </p>
+	<div style="">
+		<p id="display" style="float: left; width: 100; height: 100;">
+		<div style="float: right; width: 300;">
+			<div id="menuBtns" style="float: left; height: 100; width: 100; padding: 0; margin: 0;">
+				<button id="file" class="menuBtn" onclick="menu.file();">FILE</button>
+				<button id="tile" class="menuBtn" onclick="menu.tile();">Tile Btns</button>
+				<button id="rowCol" style="" class="menuBtn" onclick="menu.rowCol();">Row/Col</button>
+				<button id="npcFunc" style="" class="menuBtn" onclick="menu.npcFunc();">NPC/FUNC</button>
+				<button id="reset" class="menuBtn" onclick="grid.reset();">Reset</button>
+			</div>
+			<div id="npcFuncButtons" style="float: right; height: 100; width: 200; padding: 0; margin: 0; display: none;">
+				<button id="delNPC" style="width: 50%; float: left;" class="menuBtn" onclick="grid.delNPC();">Del NPC</button>
+				<button id="setNPC" style="width: 50%; float: left;" class="menuBtn" onclick="grid.setNPC();">Set NPC</button>
+				<button id="delFunc" style="width: 50%; float: left;" class="menuBtn" onclick="grid.delFunc();">Del Func</button>
+				<button id="setFunc" style="width: 50%; float: left;" class="menuBtn" onclick="grid.setFunc();">Set Func</button>
+			</div>
+			<div id="tileButtons" style="float: right; height: 100; width: 200; padding: 0; margin: 0; display: none;">
+				<button id="delTile" style="width: 50%; float: left;" class="menuBtn" onclick="grid.delTile();">Del Tile</button>
+				<button id="setTile" style="width: 50%; float: left;" class="menuBtn" onclick="grid.set();">Set Tile</button>
+				<button id="delBlock" style="width: 50%; float: left;" class="menuBtn" onclick="grid.delBlock();">DelBlock</button>
+				<button id="setBlock" style="width: 50%; float: left;" class="menuBtn" onclick="grid.setBlock();">SetBlock</button>
+				<button id="delTrans" style="width: 50%; float: left;" class="menuBtn" onclick="grid.delTrans();">DelTrans</button>
+				<button id="setTrans" style="width: 50%; float: left;" class="menuBtn" onclick="grid.setTrans();">SetTrans</button>
+				<button id="setFill" style="width: 50%; float: left;" class="menuBtn" onclick="grid.fill(tiles.array[menu.tileSelected],true);">Set Fill</button>
+			</div>
+			<div id="rowColButtons" style="float: right;  width: 200; margin: 0; display: none;">
+				<button id="setRow" style="width: 50%; float: right;" class="menuBtn" onclick="grid.setRow();">Set Row</button>
+				<button id="delRow" style="width: 50%; float: left;" class="menuBtn" onclick="grid.delRow();">Del Row</button>
+				<button id="setCol" style="width: 50%; float: right;" class="menuBtn" onclick="grid.setCol();">Set Col</button>
+				<button id="delCol" style="width: 50%; float: left;" class="menuBtn" onclick="grid.delCol();">Del Col</button>
+			</div>
+			<div id="fileMenu" style="float: right; height: 100; width: 200; margin: 0;">
+				<button id="load" style="width: 100%;" class="menuBtn" onclick="state.load();">Load File</button>
+				<button id="save" style="width: 100%;" class="menuBtn" onclick="state.save();">Save File</button>
+				<button id="new" style="width: 100%;" class="menuBtn" onclick="menu.startNew();">Start New Level</button>
+			</div>
+		</div>
+		<table id="tileStat" style="width: 400; float: left;">
+			<tr><td style="width: 25%;" class="data">XY: </td>				<td id="XY" class="data"></td></tr>
+			<tr><td style="width: 25%;" class="data">Tile Name: </td>		<td id="name" class="data"></td></tr>
+			<tr><td style="width: 25%;" class="data">canWalk: </td>			<td id="canWalk" class="data" onclick="menu.canWalk();"></td></tr>
+			<tr><td style="width: 25%;" class="data">NPC: </td>				<td id="npc" class="data"></td></tr>
+			<tr><td style="width: 25%;" class="data">Fn Notes: </td>		<td id="fn" class="data"></td></tr>
+		</table>
+		<div>
+			<button id="tileSet" style="width: 33.3%; height: 20; float: left;" class="menuBtn" onclick="tiles.options();">Tileset</button>
+			<button id="transSet" style="width: 33.3%; height: 20; float: left;" class="menuBtn" onclick="trans.options();">Transparent</button>
+			<button id="npcSet" style="width: 33.3%; height: 20; float: left;" class="menuBtn" onclick="npc.options();">NPCs</button>
+		</div>
+		<div>
+			<button id="showTrans" style="width: 33.3%; height: 20; float: left;" class="menuBtn" onclick="grid.showTrans();">Trans</button>
+			<button id="showNPC" style="width: 33.3%; height: 20; float: left;" class="menuBtn" onclick="grid.showNPC();">NPCs</button>
+			<button id="showFN" style="width: 33.3%; height: 20; float: left;" class="menuBtn" onclick="grid.showFunc();">FNs</button>
+		</div>
+		<div>
+			<button id="showTiles" style="width: 25%; height: 20; float: left;" class="menuBtn" onclick="grid.showTiles();">Tiles</button>
+			<button id="showBlock" style="width: 25%; height: 20; float: left;" class="menuBtn" onclick="grid.showBlock();">Blocks</button>
+			<button id="showRow" style="width: 25%; height: 20; float: left;" class="menuBtn" onclick="grid.showRow();">Rows</button>
+			<button id="showCol" style="width: 25%; height: 20; float: left;" class="menuBtn" onclick="grid.showCol();">Columns</button>
+		</div>
+		<ol id="tileList" style="background: blue; height: 260; width: 90%; overflow-y: scroll; float: left;  margin: 0;">
+		</ol>
+	</div>
+</div>
+
+<table id="grid" style="display: none;" class="grid"></table>
+
+
+<style>
+
+.data {height: 20; background: yellow;}
+button {font-size: 12;}
+li {background: rgba(0,0,0,0.5); color: white;}
+p {padding: 0; margin: 0;}
+div {padding: 0; margin: 0;}
+
+#UI {float: left; width: 400; height: 550; top: 20; display: none;}
+#popUp {font-size: 22; width: 300; top: 50;}
+
+.square {width: 20; height: 20; background: white; }
+.grid {background: black; position: absolute; left: 420; z-index: 0;}
+.menuBtn {width: 100; height: 20}
+
+</style>
+
+<script>
+var menu = new Object();
+menu.startNew = function() {
+	state.lvlName = window.prompt("What is the name of this level?")
+	var size = window.prompt("What size would you like the world grid to be? \n\n\t\t\t\t x,y \n\n")
+	state.array = [];
+	state.blocks = [];
+	state.npc = [];
+	state.canWalk = [];
+	state.tileFuncs = [];
+	state.rows = [];
+	state.cols = [];
+	grid.reset();
+	size = size.split(",");
+	grid.X = parseInt(size[0]);
+	grid.Y = parseInt(size[1]);
+	grid.create();
+	document.getElementById("grid").style = "width: "+(grid.X*20+grid.X)+";";
+	document.getElementById("popUp").style = "display: none;";
+	document.getElementById("UI").style = "background: yellowgreen; position: fixed; z-index: 1; display: block;";
+	document.getElementById("lvlName").innerHTML = "Level: <strong>"+state.lvlName+"</strong>";
+	tiles.options();
+}
+menu.func = function() {};
+menu.selected = null;
+menu.tileSelected = 0;
+menu.npcSelected = 0;
+menu.transSelected = 0;
+menu.tileSelect = function(n) {
+	menu.tileSelected = n;
+	menu.func();
+}
+menu.npcSelect = function(n) {
+	menu.npcSelected = n;
+	menu.func();
+}
+menu.transSelect = function(n) {
+	menu.transSelected = n;
+	menu.func();
+}
+menu.select = function(n) {
+	if (menu.selected === n) {menu.selected = null;} else {menu.selected = n;}
+	menu.func();
+}
+menu.hideButtons = function() {
+	document.getElementById("tileButtons").style = "display: none;"
+	document.getElementById("rowColButtons").style = "display: none;"
+	document.getElementById("fileMenu").style = "display: none;"
+	document.getElementById("npcFuncButtons").style = "display: none;";
+}
+menu.npcFunc = function() {
+	menu.hideButtons();
+	document.getElementById("npcFuncButtons").style = "float: right; height: 100; width: 200; padding: 0; margin: 0;";
+}
+menu.rowCol = function() {
+	menu.hideButtons();
+	document.getElementById("rowColButtons").style = "float: right; height: 100; width: 200; padding: 0; margin: 0;";
+}
+menu.tile = function() {
+	menu.hideButtons();
+	document.getElementById("tileButtons").style = "float: right; height: 100; width: 200; padding: 0; margin: 0;";
+}
+menu.file = function() {
+	menu.hideButtons();
+	document.getElementById("fileMenu").style = "float: right; height: 100; width: 200; padding: 0; margin: 0;";
+}
+menu.canWalk = function() {
+	var walkNum = false;
+	for (let i=0; i<state.canWalk.length; i+=1) {
+		if (state.canWalk[i][0] === grid.current[0] && state.canWalk[i][1] === grid.current[1]) {
+			walkNum = i;
+			break;
+		}
+	}
+	if (walkNum !== false) {
+		grid.array[state.canWalk[walkNum][0]][state.canWalk[walkNum][1]][0].canWalk = !grid.array[state.canWalk[walkNum][0]][state.canWalk[walkNum][1]][0].canWalk;
+		state.canWalk.splice(walkNum,1);
+	} else {
+		grid.array[grid.current[0]][grid.current[1]][0].canWalk = !grid.array[grid.current[0]][grid.current[1]][0].canWalk;
+		state.canWalk.push([grid.current[0],grid.current[1],grid.array[grid.current[0]][grid.current[1]][0].canWalk]);
+	}
+	grid.display();
+}
+
+var state = new Object();
+state.lvlName = "";
+state.array = [];				//	[	x, y, tile name		]
+state.trans = [];				//	[	x, y, trans name	]
+state.tileFuncs = [];			//	[	x, y, func notes	]
+state.canWalk = [];				//	[	x, y, canWalk		]
+state.npc = [];					//	[	x, y, npc			]
+state.rows = [];
+state.cols = [];
+state.blocks = [];
+state.fill = 0;
+state.saveFile = "";
+state.save = function() {
+	state.saveFile += "lvlName="+state.lvlName+";fill="+state.fill+";gridX="+grid.X+";gridY="+grid.Y+";"
+	for (let i=0; i<state.rows.length; i+=1) {
+		state.saveFile += "row"+i+"=r:"+state.rows[i][0]+",name:"+state.rows[i][1]+";"
+	}
+	for (let i=0; i<state.cols.length; i+=1) {
+		state.saveFile += "col"+i+"=c:"+state.cols[i][0]+",name:"+state.cols[i][1]+";"
+	}
+	for (let i=0; i<state.blocks.length; i+=1) {
+		state.saveFile += "block"+i+"=x:"+state.blocks[i][0]+",y:"+state.blocks[i][1]+",l:"+state.blocks[i][2]+",h:"+state.blocks[i][3]+",name:"+state.blocks[i][4]+";"
+	}
+	for (let i=0; i<state.array.length; i+=1) {
+		state.saveFile += "tile"+i+"=x:"+state.array[i][0]+",y:"+state.array[i][1]+",name:"+state.array[i][2]+";"
+	}
+	for (let i=0; i<state.trans.length; i+=1) {
+		state.saveFile += "trans"+i+"=x:"+state.trans[i][0]+",y:"+state.trans[i][1]+",name:"+state.trans[i][2]+";"
+	}
+	for (let i=0; i<state.tileFuncs.length; i+=1) {
+		state.saveFile += "func"+i+"=x:"+state.tileFuncs[i][0]+",y:"+state.tileFuncs[i][1]+",note:"+state.tileFuncs[i][2]+";"
+	}
+	for (let i=0; i<state.npc.length; i+=1) {
+		state.saveFile += "npc"+i+"=x:"+state.npc[i][0]+",y:"+state.npc[i][1]+",name:"+state.npc[i][2]+";"
+	}
+	for (let i=0; i<state.canWalk.length; i+=1) {
+		state.saveFile += "walk"+i+"=x:"+state.canWalk[i][0]+",y:"+state.canWalk[i][1]+",tf:"+state.canWalk[i][2]+";"
+	}
+	window.alert(state.saveFile);
+	state.saveFile = "";
+}
+state.load = function() {
+	state.saveFile = window.prompt("Please enter the save filecode for your level. ");
+	state.array = [];
+	state.rows = [];
+	state.cols = [];
+	var sav = state.saveFile.split(";");
+	for (let i=0; i<sav.length; i+=1) {
+		var keyVal = sav[i].split("=");
+		if (/^tile/.test(keyVal[0])) {
+			var tileData = keyVal[1].split(",");
+			var arr = [];
+			arr.push(parseInt(tileData[0].split(":")[1]));
+			arr.push(parseInt(tileData[1].split(":")[1]));
+			arr.push(tileData[2].split(":")[1]);
+			state.array.push(arr);
+		} else if (/^block/.test(keyVal[0])) {
+			var blockData = keyVal[1].split(",");
+			var arr = [];
+			arr.push(parseInt(blockData[0].split(":")[1]));
+			arr.push(parseInt(blockData[1].split(":")[1]));
+			arr.push(parseInt(blockData[2].split(":")[1]));
+			arr.push(parseInt(blockData[3].split(":")[1]));
+			arr.push(blockData[4].split(":")[1]);
+			state.blocks.push(arr);
+		} else if (/^trans/.test(keyVal[0])) {
+			var transData = keyVal[1].split(",");
+			var arr = [];
+			arr.push(parseInt(transData[0].split(":")[1]));
+			arr.push(parseInt(transData[1].split(":")[1]));
+			arr.push(transData[2].split(":")[1]);
+			state.trans.push(arr);
+		} else if (/^row/.test(keyVal[0])) {
+			var rowData = keyVal[1].split(",");
+			state.rows.push([parseInt(rowData[0].split(":")[1]),rowData[1].split(":")[1]]);
+		} else if (/^col/.test(keyVal[0])) {
+			var colData = keyVal[1].split(",");
+			state.cols.push([parseInt(colData[0].split(":")[1]),colData[1].split(":")[1]]);
+		} else if (/^func/.test(keyVal[0])) {
+			var funcData = keyVal[1].split(",");
+			var arr = [];
+			arr.push(parseInt(funcData[0].split(":")[1]));
+			arr.push(parseInt(funcData[1].split(":")[1]));
+			arr.push(funcData[2].split(":")[1]);
+			state.tileFuncs.push(arr);
+		} else if (/^walk/.test(keyVal[0])) {
+			var walkData = keyVal[1].split(",");
+			var arr = [];
+			arr.push(parseInt(walkData[0].split(":")[1]));
+			arr.push(parseInt(walkData[1].split(":")[1]));
+			if (walkData[2].split(":")[1] === "true") {
+				arr.push(true);
+			} else {arr.push(false);}
+			state.canWalk.push(arr);
+		} else if (/^npc/.test(keyVal[0])) {
+			var npcData = keyVal[1].split(",");
+			var arr = [];
+			arr.push(parseInt(npcData[0].split(":")[1]));
+			arr.push(parseInt(npcData[1].split(":")[1]));
+			arr.push(npcData[2].split(":")[1]);
+			state.npc.push(arr);
+		} else if (keyVal[0] === "fill") {
+			state.fill = parseInt(keyVal[1]);
+		} else if (keyVal[0] === "gridX") {
+			grid.X = parseInt(keyVal[1]);
+		} else if (keyVal[0] === "gridY") {
+			grid.Y = parseInt(keyVal[1]);
+		} else if (keyVal[0] === "lvlName") {
+			state.lvlName = keyVal[1];
+		}
+	}
+	state.saveFile = "";
+	state.draw();
+}
+state.draw = function() {
+	document.getElementById("lvlName").innerHTML = "Level: <strong>"+state.lvlName+"</strong>";
+	document.getElementById("grid").innerHTML = "";
+	document.getElementById("grid").style = "width: "+(grid.X*20+grid.X)+";";
+	document.getElementById("popUp").style = "display: none;";
+	document.getElementById("UI").style = "background: yellowgreen; position: fixed; z-index: 1; display: block;";
+	tiles.options();
+	grid.create();
+	grid.fill(tiles.array[state.fill],false);
+	for (let x=0; x<grid.X; x+=1) {
+		for (let y=0; y<grid.Y; y+=1) {
+			document.getElementById("gridX"+x+"Y"+(grid.Y-1-y)).className = "square";
+		}
+	}
+	for (let i=0; i<state.cols.length; i+=1) {
+		for (y=0; y<grid.Y; y+=1) {
+			grid.array[state.cols[i][0]][y][0] = tiles.nameCheck(state.cols[i][1]);
+		}
+	}
+	for (let i=0; i<state.rows.length; i+=1) {
+		for (x=0; x<grid.X; x+=1) {
+			grid.array[x][state.rows[i][0]][0] = tiles.nameCheck(state.rows[i][1]);
+		}
+	}
+	for (let i=0; i<state.blocks.length; i+=1) {
+		var X = parseInt(state.blocks[i][0]);
+		var Y = parseInt(state.blocks[i][1]);
+		var L = parseInt(state.blocks[i][2]);
+		var H = parseInt(state.blocks[i][3]);
+		for (let x=0; x<=L; x+=1) {
+			for (let y=0; y<=H; y+=1) {
+				grid.array[x+X][y+Y][0] = tiles.nameCheck(state.blocks[i][4]);
+			}
+		}
+	}
+	for (let i=0; i<state.array.length; i+=1) {
+		var x = parseInt(state.array[i][0]);
+		var y = parseInt(state.array[i][1]);
+		grid.array[x][y][0] = tiles.nameCheck(state.array[i][2]);
+	}
+	for (let i=0; i<state.tileFuncs.length; i+=1) {
+		var x = state.tileFuncs[i][0];
+		var y = state.tileFuncs[i][1];
+		grid.array[x][y][1] = state.tileFuncs[i][2];
+	}
+	for (let i=0; i<state.trans.length; i+=1) {
+		var x = parseInt(state.trans[i][0]);
+		var y = parseInt(state.trans[i][1]);
+		grid.array[x][y][2] = trans.nameCheck(state.trans[i][2]);
+		grid.array[x][y][0].canWalk = grid.array[x][y][2].canWalk;
+	}
+	for (let i=0; i<state.canWalk.length; i+=1) {
+		var x = state.canWalk[i][0];
+		var y = state.canWalk[i][1];
+		grid.array[x][y][0].canWalk = state.canWalk[i][2];
+	}
+	grid.render();	
+}
+
+/*
+
+lvlName=bigWorld;fill=10;gridX=100;gridY=100;row0=r:99,name:water;row1=r:98,name:water;row2=r:97,name:water;row3=r:96,name:water;row4=r:95,name:water;row5=r:94,name:water;row6=r:93,name:water;row7=r:92,name:sandstone;row8=r:91,name:sandstone;row9=r:90,name:sandstone;row10=r:89,name:sandstone;row11=r:88,name:sandstone;col0=c:9,name:dirt;col1=c:10,name:dirt;col2=c:11,name:dirt;col3=c:12,name:dirt;tile0=x:8,y:83,name:dirt;tile1=x:7,y:83,name:dirt;tile2=x:6,y:83,name:dirt;tile3=x:5,y:83,name:dirt;tile4=x:7,y:84,name:grassHouse;tile5=x:5,y:84,name:grassHouse;
+
+lvlName=Beach;fill=10;gridX=20;gridY=20;block0=x:16,y:0,l:3,h:19,name:water;block1=x:12,y:0,l:3,h:19,name:sandstone;block2=x:0,y:11,l:12,h:1,name:dirt;block3=x:14,y:16,l:1,h:3,name:water;block4=x:9,y:17,l:2,h:2,name:sandstone;block5=x:12,y:0,l:1,h:3,name:grass;block6=x:16,y:0,l:1,h:3,name:sandstone;block7=x:13,y:11,l:5,h:1,name:wood;block8=x:4,y:8,l:1,h:2,name:dirt;block9=x:0,y:5,l:2,h:1,name:dirt;block10=x:3,y:6,l:0,h:2,name:dirt;block11=x:2,y:7,l:2,h:0,name:dirt;tile0=x:8,y:19,name:sandstone;tile1=x:11,y:16,name:sandstone;tile2=x:10,y:16,name:sandstone;tile3=x:11,y:15,name:sandstone;tile4=x:18,y:0,name:sandstone;tile5=x:16,y:4,name:sandstone;tile6=x:16,y:5,name:sandstone;tile7=x:16,y:6,name:sandstone;tile8=x:15,y:15,name:water;tile9=x:15,y:14,name:water;tile10=x:13,y:19,name:water;tile11=x:13,y:18,name:water;tile12=x:12,y:19,name:water;tile13=x:12,y:5,name:grass;tile14=x:12,y:4,name:grass;tile15=x:14,y:0,name:grass;tile16=x:14,y:1,name:grass;tile17=x:6,y:13,name:grassHouse;tile18=x:8,y:13,name:grassHouse;func0=x:7,y:12,note:spawn;npc0=x:4,y:18,name:goblin;walk0=x:18,y:12,tf:false;walk1=x:18,y:11,tf:false;
+
+lvlName=Oakloft;fill=10;gridX=50;gridY=50;block0=x:0,y:0,l:5,h:49,name:water;block1=x:44,y:0,l:5,h:49,name:water;block2=x:6,y:45,l:37,h:4,name:water;block3=x:6,y:0,l:37,h:4,name:water;block4=x:40,y:41,l:3,h:3,name:water;block5=x:6,y:41,l:3,h:3,name:water;block6=x:6,y:39,l:1,h:1,name:water;block7=x:10,y:43,l:1,h:1,name:water;block8=x:38,y:43,l:1,h:1,name:water;block9=x:42,y:39,l:1,h:1,name:water;block10=x:6,y:5,l:3,h:3,name:water;block11=x:40,y:5,l:3,h:3,name:water;block12=x:42,y:9,l:1,h:1,name:water;block13=x:38,y:5,l:1,h:1,name:water;block14=x:10,y:5,l:1,h:1,name:water;block15=x:6,y:9,l:1,h:1,name:water;block16=x:12,y:5,l:25,h:0,name:water;block17=x:43,y:11,l:0,h:27,name:water;block18=x:6,y:11,l:0,h:27,name:water;block19=x:12,y:44,l:25,h:0,name:water;block20=x:12,y:6,l:25,h:4,name:sandstone;block21=x:38,y:11,l:4,h:27,name:sandstone;block22=x:12,y:39,l:25,h:4,name:sandstone;block23=x:7,y:11,l:4,h:27,name:sandstone;block24=x:8,y:9,l:3,h:1,name:sandstone;block25=x:10,y:7,l:1,h:1,name:sandstone;block26=x:12,y:11,l:1,h:1,name:sandstone;block27=x:38,y:9,l:3,h:1,name:sandstone;block28=x:38,y:7,l:1,h:1,name:sandstone;block29=x:36,y:11,l:1,h:1,name:sandstone;block30=x:38,y:39,l:1,h:3,name:sandstone;block31=x:40,y:39,l:1,h:1,name:sandstone;block32=x:36,y:37,l:1,h:1,name:sandstone;block33=x:10,y:39,l:1,h:3,name:sandstone;block34=x:8,y:39,l:1,h:1,name:sandstone;block35=x:12,y:37,l:1,h:1,name:sandstone;block36=x:28,y:31,l:6,h:0,name:concrete;block37=x:28,y:27,l:6,h:0,name:concrete;block38=x:14,y:32,l:0,h:3,name:stoneWall;block39=x:24,y:32,l:0,h:3,name:stoneWall;block40=x:16,y:30,l:6,h:0,name:stoneWall;block41=x:13,y:29,l:3,h:0,name:stoneWall;block42=x:13,y:30,l:0,h:2,name:stoneWall;block43=x:25,y:29,l:0,h:3,name:stoneWall;block44=x:22,y:29,l:2,h:0,name:stoneWall;block45=x:15,y:31,l:8,h:5,name:concrete;block46=x:13,y:35,l:0,h:3,name:stoneWall;block47=x:16,y:37,l:6,h:0,name:stoneWall;block48=x:14,y:38,l:2,h:0,name:stoneWall;block49=x:22,y:38,l:3,h:0,name:stoneWall;block50=x:25,y:35,l:0,h:2,name:stoneWall;block51=x:15,y:31,l:8,h:5,name:concrete;block52=x:18,y:27,l:2,h:2,name:concrete;block53=x:18,y:22,l:8,h:4,name:concrete;block54=x:23,y:18,l:0,h:3,name:concrete;block55=x:29,y:14,l:0,h:7,name:concrete;block56=x:30,y:14,l:5,h:0,name:concrete;block57=x:35,y:15,l:0,h:6,name:concrete;block58=x:28,y:22,l:7,h:0,name:concrete;block59=x:30,y:18,l:4,h:0,name:concrete;block60=x:27,y:22,l:0,h:18,name:concrete;block61=x:26,y:41,l:2,h:1,name:concrete;block62=x:20,y:8,l:0,h:8,name:concrete;block63=x:13,y:17,l:15,h:0,name:concrete;block64=x:20,y:2,l:0,h:5,name:woodFloor;tile0=x:9,y:41,name:sandstone;tile1=x:12,y:36,name:sandstone;tile2=x:12,y:35,name:sandstone;tile3=x:35,y:38,name:sandstone;tile4=x:34,y:38,name:sandstone;tile5=x:37,y:36,name:sandstone;tile6=x:37,y:35,name:sandstone;tile7=x:40,y:41,name:sandstone;tile8=x:9,y:8,name:sandstone;tile9=x:12,y:14,name:sandstone;tile10=x:12,y:13,name:sandstone;tile11=x:14,y:11,name:sandstone;tile12=x:15,y:11,name:sandstone;tile13=x:35,y:11,name:sandstone;tile14=x:37,y:13,name:sandstone;tile15=x:37,y:14,name:sandstone;tile16=x:34,y:11,name:sandstone;tile17=x:34,y:32,name:grassHouse;tile18=x:32,y:32,name:grassHouse;tile19=x:30,y:32,name:grassHouse;tile20=x:34,y:28,name:grassHouse;tile21=x:32,y:28,name:grassHouse;tile22=x:30,y:28,name:grassHouse;tile23=x:24,y:31,name:concrete;tile24=x:24,y:30,name:concrete;tile25=x:23,y:30,name:concrete;tile26=x:15,y:30,name:concrete;tile27=x:14,y:30,name:concrete;tile28=x:14,y:31,name:concrete;tile29=x:23,y:37,name:concrete;tile30=x:24,y:37,name:concrete;tile31=x:24,y:36,name:concrete;tile32=x:14,y:36,name:concrete;tile33=x:14,y:37,name:concrete;tile34=x:15,y:37,name:concrete;tile35=x:19,y:30,name:concrete;tile36=x:31,y:23,name:grassHouse;tile37=x:33,y:23,name:grassHouse;tile38=x:31,y:15,name:grassHouse;tile39=x:33,y:15,name:grassHouse;tile40=x:25,y:18,name:grassHouse;tile41=x:27,y:18,name:grassHouse;tile42=x:27,y:42,name:concreteArena;tile43=x:13,y:18,name:grassHouse;tile44=x:25,y:24,name:concreteShop;tile45=x:21,y:24,name:concreteBank;tile46=x:33,y:19,name:grassHouse;tile47=x:31,y:19,name:grassHouse;func0=x:25,y:17,note:spawn;
+
+lvlName=Dungeon;fill=0;gridX=35;gridY=25;row0=r:24,name:stoneWall;row1=r:23,name:stoneWall;row2=r:0,name:stoneWall;row3=r:1,name:stoneWall;row4=r:5,name:stoneWall;row5=r:7,name:stoneWall;row6=r:15,name:stoneWall;row7=r:17,name:stoneWall;row8=r:11,name:stoneWall;row9=r:9,name:stoneWall;col0=c:0,name:stoneWall;col1=c:34,name:stoneWall;col2=c:2,name:stoneWall;col3=c:12,name:stoneWall;col4=c:16,name:stoneWall;col5=c:32,name:stoneWall;col6=c:8,name:stoneWall;col7=c:6,name:stoneWall;col8=c:30,name:stoneWall;block0=x:24,y:19,l:9,h:0,name:stoneWall;block1=x:4,y:16,l:0,h:6,name:stoneWall;block2=x:10,y:19,l:0,h:3,name:stoneWall;block3=x:17,y:19,l:5,h:0,name:stoneWall;block4=x:20,y:20,l:6,h:1,name:stoneWall;block5=x:18,y:13,l:10,h:0,name:stoneWall;tile0=x:2,y:23,name:concrete;tile1=x:32,y:1,name:concrete;tile2=x:2,y:22,name:concrete;tile3=x:32,y:2,name:concrete;tile4=x:32,y:6,name:concrete;tile5=x:32,y:18,name:concrete;tile6=x:32,y:20,name:concrete;tile7=x:32,y:22,name:concrete;tile8=x:31,y:17,name:concrete;tile9=x:33,y:17,name:concrete;tile10=x:33,y:15,name:concrete;tile11=x:31,y:15,name:concrete;tile12=x:30,y:20,name:concrete;tile13=x:30,y:22,name:concrete;tile14=x:30,y:18,name:concrete;tile15=x:30,y:16,name:concrete;tile16=x:30,y:6,name:concrete;tile17=x:31,y:5,name:concrete;tile18=x:33,y:5,name:concrete;tile19=x:17,y:5,name:concrete;tile20=x:13,y:5,name:concrete;tile21=x:15,y:5,name:concrete;tile22=x:1,y:5,name:concrete;tile23=x:3,y:5,name:concrete;tile24=x:2,y:6,name:concrete;tile25=x:6,y:2,name:concrete;tile26=x:6,y:4,name:concrete;tile27=x:8,y:2,name:concrete;tile28=x:1,y:17,name:concrete;tile29=x:1,y:15,name:concrete;tile30=x:1,y:11,name:concrete;tile31=x:2,y:10,name:concrete;tile32=x:5,y:11,name:concrete;tile33=x:5,y:9,name:concrete;tile34=x:2,y:8,name:concrete;tile35=x:1,y:7,name:concrete;tile36=x:6,y:6,name:concrete;tile37=x:8,y:6,name:concrete;tile38=x:7,y:9,name:concrete;tile39=x:8,y:8,name:concrete;tile40=x:7,y:11,name:concrete;tile41=x:6,y:14,name:concrete;tile42=x:8,y:14,name:concrete;tile43=x:3,y:15,name:concrete;tile44=x:3,y:17,name:concrete;tile45=x:6,y:16,name:concrete;tile46=x:12,y:20,name:concrete;tile47=x:7,y:17,name:concrete;tile48=x:5,y:17,name:concrete;tile49=x:17,y:15,name:concrete;tile50=x:23,y:11,name:concrete;tile51=x:29,y:11,name:concrete;tile52=x:31,y:11,name:concrete;tile53=x:31,y:9,name:concrete;tile54=x:31,y:7,name:concrete;tile55=x:29,y:9,name:concrete;tile56=x:25,y:9,name:concrete;tile57=x:23,y:9,name:concrete;tile58=x:13,y:9,name:concrete;tile59=x:11,y:9,name:concrete;tile60=x:11,y:7,name:concrete;tile61=x:13,y:7,name:concrete;tile62=x:15,y:7,name:concrete;tile63=x:16,y:10,name:concrete;tile64=x:16,y:8,name:concrete;tile65=x:13,y:15,name:concrete;tile66=x:15,y:15,name:concrete;tile67=x:13,y:17,name:concrete;tile68=x:11,y:17,name:concrete;tile69=x:9,y:17,name:concrete;tile70=x:16,y:20,name:concrete;tile71=x:16,y:22,name:concrete;tile72=x:12,y:2,name:concrete;tile73=x:11,y:15,name:concrete;tile74=x:9,y:15,name:concrete;tile75=x:31,y:21,name:stoneWall;tile76=x:29,y:21,name:stoneWall;tile77=x:28,y:22,name:stoneWall;tile78=x:28,y:21,name:stoneWall;tile79=x:13,y:19,name:stoneWall;tile80=x:14,y:19,name:stoneWall;tile81=x:14,y:20,name:stoneWall;tile82=x:14,y:21,name:stoneWall;tile83=x:15,y:21,name:stoneWall;tile84=x:17,y:21,name:stoneWall;tile85=x:18,y:21,name:stoneWall;tile86=x:13,y:3,name:stoneWall;tile87=x:14,y:3,name:stoneWall;tile88=x:14,y:4,name:stoneWall;tile89=x:14,y:8,name:stoneWall;tile90=x:4,y:4,name:stoneWall;tile91=x:4,y:3,name:stoneWall;tile92=x:5,y:3,name:stoneWall;tile93=x:1,y:21,name:stoneWall;tile94=x:25,y:20,name:concrete;tile95=x:24,y:20,name:concrete;tile96=x:23,y:20,name:concrete;tile97=x:22,y:20,name:concrete;tile98=x:21,y:20,name:concrete;tile99=x:25,y:13,name:concrete;tile100=x:24,y:12,name:stoneWall;tile101=x:28,y:12,name:stoneWall;tile102=x:18,y:14,name:stoneWall;tile103=x:14,y:13,name:stoneWall;tile104=x:14,y:14,name:stoneWall;tile105=x:14,y:16,name:stoneWall;tile106=x:33,y:13,name:stoneWall;tile107=x:33,y:3,name:stoneWall;tile108=x:28,y:3,name:stoneWall;tile109=x:28,y:2,name:stoneWall;tile110=x:26,y:3,name:stoneWall;tile111=x:26,y:4,name:stoneWall;tile112=x:24,y:2,name:stoneWall;tile113=x:24,y:3,name:stoneWall;tile114=x:22,y:4,name:stoneWall;tile115=x:22,y:3,name:stoneWall;tile116=x:20,y:2,name:stoneWall;tile117=x:20,y:3,name:stoneWall;tile118=x:18,y:3,name:stoneWall;tile119=x:18,y:4,name:stoneWall;tile120=x:10,y:3,name:stoneWall;tile121=x:10,y:2,name:stoneWall;tile122=x:9,y:13,name:stoneWall;tile123=x:10,y:13,name:stoneWall;tile124=x:10,y:14,name:stoneWall;tile125=x:10,y:16,name:stoneWall;tile126=x:10,y:18,name:stoneWall;tile127=x:24,y:8,name:stoneWall;tile128=x:26,y:8,name:stoneWall;tile129=x:22,y:10,name:stoneWall;tile130=x:10,y:10,name:stoneWall;tile131=x:8,y:22,name:concrete;tile132=x:9,y:11,name:concrete;tile133=x:33,y:11,name:concrete;tile134=x:33,y:9,name:concrete;tile135=x:33,y:7,name:concrete;tile136=x:5,y:13,name:stoneWall;tile137=x:4,y:13,name:stoneWall;tile138=x:3,y:13,name:stoneWall;func0=x:2,y:23,note:victory;func1=x:32,y:1,note:spawn;
+
+lvlName=house;fill=0;gridX=7;gridY=6;row0=r:0,name:black;row1=r:1,name:stoneWall;row2=r:5,name:stoneWall;col0=c:6,name:black;col1=c:0,name:black;tile0=x:5,y:4,name:concreteSafe;tile1=x:3,y:1,name:concrete;func0=x:3,y:1,note:exit(Oakloft);
+
+lvlName=transparent;fill=0;gridX=12;gridY=12;row0=r:11,name:fence;row1=r:0,name:fence;col0=c:0,name:fence;col1=c:11,name:fence;trans0=x:9,y:8,name:house;trans1=x:9,y:5,name:house;trans2=x:2,y:8,name:shop;trans3=x:6,y:8,name:bank;trans4=x:2,y:5,name:safe;trans5=x:6,y:5,name:arena;func0=x:4,y:6,note:spawn;
+
+*/
+
+state.reset = function() {
+	grid.X = 0;
+	grid.Y = 0;
+	grid.array = [];
+	grid.onClick = [];
+}
+
+var grid = new Object();
+grid.X = 0;
+grid.Y = 0;
+grid.rows = [];
+grid.cols = [];
+grid.array = [];
+grid.trans = [];
+grid.onClick = [];
+grid.func = function() {};
+grid.create = function() {
+	for (x=0; x<grid.X; x+=1) {
+		grid.array[x] = [];
+		grid.onClick[x] = [];
+		for (y=0; y<grid.Y; y+=1) {
+			grid.array[x][y] = [];
+			grid.onClick[x][y] = 0;
+		}
+	}
+	for (y=0; y<grid.Y; y+=1) {
+		var row = document.getElementById("grid").appendChild(document.createElement("tr"))
+		row.id = "row"+y
+		for (x=0; x<grid.X; x+=1) {
+			var data = row.appendChild(document.createElement("td"))
+			data.id = "gridX"+x+"Y"+(grid.Y-1-y);
+			data.className = "square";
+			var transDiv = data.appendChild(document.createElement("div"))
+			transDiv.id = "transX"+x+"Y"+(grid.Y-1-y);
+			transDiv.style = "background: rgba(0,0,0,0);"
+			transDiv.className = "square";
+			grid.onClick[x][y] = function(){grid.idParse(this.id)};
+			data.onclick = grid.onClick[x][y];
+		}
+	}
+}
+grid.idParse = function(id) {
+	var xy = id.replace("gridX","");
+	xy = xy.split("Y");
+	xy[0] = parseInt(xy[0]);
+	xy[1] = parseInt(xy[1]);
+	grid.current = xy;
+	grid.func();
+	grid.display();
+}
+grid.display = function() {
+	var clicked = grid.array[grid.current[0]][grid.current[1]][0]
+	document.getElementById("XY").innerHTML = grid.current;
+	document.getElementById("name").innerHTML = "tiles."+clicked.name;
+	document.getElementById("canWalk").innerHTML = clicked.canWalk;
+	document.getElementById("npc").innerHTML = "";
+	document.getElementById("fn").innerHTML = "";
+	if (typeof grid.array[grid.current[0]][grid.current[1]][1] !== "undefined") {
+		document.getElementById("fn").innerHTML = grid.array[grid.current[0]][grid.current[1]][1];
+	}
+	for (let i=0; i<state.npc.length; i+=1) {
+		if (state.npc[i][0] === grid.current[0] && state.npc[i][1] === grid.current[1]) {
+			document.getElementById("npc").innerHTML = state.npc[i][2];
+			break;
+		}
+	}
+}
+grid.fill = function(n,reset) {
+	if (reset === true) {
+		state.rows = [];
+		state.cols = [];
+		state.blocks = [];
+		state.array = [];
+		state.trans = [];
+		state.canWalik = [];
+		state.tileFuncs = [];
+		state.npc = [];
+	}
+	for (let x=0; x<grid.X; x+=1) {for (let y=0; y<grid.Y; y+=1) {grid.array[x][y][0] = n();}}
+	for (let i=0; i<tiles.array.length; i+=1) {
+		let tmp = tiles.array[i]();
+		if (grid.array[0][0][0].name === tmp.name) {
+			state.fill = i;
+			break;
+		}
+		delete tmp;
+	}
+	grid.display();
+	grid.render();
+}
+grid.set = function() {
+	grid.reset();
+	tiles.options();
+	document.getElementById("action").innerHTML = "Action: SET TILE";
+	grid.func = function() {
+		grid.array[grid.current[0]][grid.current[1]][0] = tiles.array[menu.tileSelected]();
+		grid.render();
+		var l = state.array.length;
+		for (let i=0; i<state.array.length; i+=1) {
+			if (state.array[i][0] === grid.current[0] && state.array[i][1] === grid.current[1]) {
+				l = i;
+				break;
+			}
+		}
+		state.array[l] = grid.current;
+		state.array[l][2] = grid.array[grid.current[0]][grid.current[1]][0].name;
+		state.array[l][3] = grid.array[grid.current[0]][grid.current[1]][0].canWalk;
+		state.array[l][4] = grid.array[grid.current[0]][grid.current[1]][0].runScript;
+		state.array[l][5] = grid.array[grid.current[0]][grid.current[1]][1];
+		tiles.options();
+	}
+	grid.display();
+}
+grid.delTile = function() {
+	grid.reset();
+	grid.showTiles();
+	document.getElementById("action").innerHTML = "Action: DELETE TILE";
+	grid.func = function() {
+		for (let x=0; x<state.array.length; x+=1) {if (state.array[x][0] === grid.current[0] && state.array[x][1] === grid.current[1]) {state.array.splice(x,1);}}
+		var hasRow = false;
+		var hasCol = false;
+		for (let i=0; i<state.rows.length; i+=1) {
+			if (state.rows[i][0] === grid.current[1]) {
+				grid.array[grid.current[0]][grid.current[1]][0] = tiles.nameCheck(state.rows[i][1]);
+				hasRow = true; 
+				break;
+			}
+		}
+		for (let i=0; i<state.cols.length; i+=1) {
+			if (hasRow === true) {break;}
+			if (state.cols[i][0] === grid.current[0]) {
+				grid.array[grid.current[0]][grid.current[1]][0] = tiles.nameCheck(state.cols[i][1]);
+				hasCol = true;
+			}
+		}
+		if (hasRow === false && hasCol === false) {grid.array[grid.current[0]][grid.current[1]][0] = tiles.array[state.fill]();}
+		grid.render();
+		grid.showTiles();
+	}
+	grid.display();
+	grid.render();
+}
+grid.setTrans = function() {
+	grid.reset();
+	trans.options();
+	document.getElementById("action").innerHTML = "Action: SET TRANSPARENT";
+	grid.func = function() {
+		grid.array[grid.current[0]][grid.current[1]][2] = trans.array[menu.transSelected]();
+		grid.render();
+		var l = state.trans.length;
+		for (let i=0; i<state.trans.length; i+=1) {
+			if (state.trans[i][0] === grid.current[0] && state.trans[i][1] === grid.current[1]) {
+				l = i;
+				break;
+			}
+		}
+		state.trans[l] = grid.current;
+		state.trans[l][2] = grid.array[grid.current[0]][grid.current[1]][2].name;
+		grid.array[grid.current[0]][grid.current[1]][0].canWalk = grid.array[grid.current[0]][grid.current[1]][2].canWalk;
+		trans.options();
+	}
+	grid.display();
+}
+grid.delTrans = function() {
+	grid.reset();
+	grid.showTrans();
+	document.getElementById("action").innerHTML = "Action: DELETE TRANSPARENT";
+	grid.func = function() {
+		for (let x=0; x<state.trans.length; x+=1) {if (state.trans[x][0] === grid.current[0] && state.trans[x][1] === grid.current[1]) {state.trans.splice(x,1);}}
+		var tmp = tiles.nameCheck(grid.array[grid.current[0]][grid.current[1]][0].name);
+		grid.array[grid.current[0]][grid.current[1]][0].canWalk = tmp.canWalk;
+		delete tmp;
+		delete	grid.array[grid.current[0]][grid.current[1]][2];
+		grid.render();
+		grid.showTrans();
+	}
+	grid.display();
+	grid.render();
+}
+grid.setRow = function() {
+	grid.reset();
+	tiles.options();
+	document.getElementById("action").innerHTML = "Action: SET ROW";
+	grid.func = function() {
+		var tileFill = [];
+		var blockFill = [];
+		for (let x=0; x<grid.X; x+=1) {
+			tileFill[x] = false;
+			blockFill[x] = false;
+		}
+		for (let i=0; i<state.array.length; i+=1) {if (state.array[i][1] === grid.current[1]) {tileFill[state.array[i][0]] = true;}}
+		for (let i=0; i<state.blocks.length; i+=1) {
+			if (grid.current[1] >= state.blocks[i][1] && grid.current[1] <= state.blocks[i][1]+state.blocks[i][3]) {
+				for (let j=0; j<=state.blocks[i][2]; j+=1) {blockFill[state.blocks[i][0]+j] = true;}
+			}
+		}
+		for (let x=0; x<grid.X; x+=1) {if (tileFill[x] === false && blockFill[x] === false) {grid.array[x][grid.current[1]][0] = tiles.array[menu.tileSelected]();}}
+		for (let i=0; i<state.rows.length; i+=1) {if (state.rows[i][0] === grid.current[1]) {state.rows.splice(i,1);}}
+		var name = grid.array[0][grid.current[1]][0].name
+		state.rows.push([grid.current[1], name])
+		tiles.options();
+		grid.display();
+		grid.render();
+	};
+	grid.display();
+}
+grid.setCol = function() {
+	grid.reset();
+	tiles.options();
+	document.getElementById("action").innerHTML = "Action: SET COLUMN";
+	grid.func = function() {
+		var choices = [];
+		for (let y=0; y<grid.Y; y+=1) {choices.push(y);}
+		for (let i=0; i<state.rows.length; i+=1) {delete choices[state.rows[i][0]];}
+		for (let i=0; i<state.blocks.length; i+=1) {
+			if (grid.current[0] >= state.blocks[i][0] && grid.current[0] <= state.blocks[i][0]+state.blocks[i][2]) {
+				for (let j=0; j<=state.blocks[i][3]; j+=1) {delete choices[state.blocks[i][1]+j];}
+			}
+		}
+		for (let i=0; i<state.array.length; i+=1) {if (state.array[i][0] === grid.current[0]) {delete choices[state.array[i][1]];}}
+		for (let i=0; i<choices.length; i+=1) {if (typeof choices[i] === "number") {grid.array[grid.current[0]][choices[i]][0] = tiles.array[menu.tileSelected]();}}
+		for (let i=0; i<state.cols.length; i+=1) {if (state.cols[i][0] === grid.current[0]) {state.cols.splice(i,1);}}
+		var name = grid.array[grid.current[0]][0][0].name;
+		state.cols.push([grid.current[0], name])
+		tiles.options();
+		grid.render();
+		grid.display();
+	};
+}
+grid.blockCorner = 0;
+grid.blockTemp = [];
+grid.setBlock = function() {
+	grid.reset();
+	tiles.options();
+	document.getElementById("action").innerHTML = "Action: SET BLOCK";
+	grid.func = function() {if (grid.blockCorner === 0) {set();} else {setLimit();}}
+	function set() {
+		document.getElementById("action").innerHTML = "Action: BLOCK START: ["+grid.current[0]+","+grid.current[1]+"] SET BLOCK LIMIT";
+		grid.blockCorner = 1;
+		grid.blockTemp = [grid.current[0],grid.current[1]];	
+		grid.showBlock();
+	}
+	function setLimit() {
+		document.getElementById("action").innerHTML = "Action: SET BLOCK";
+		var blockLength = grid.current[0] - grid.blockTemp[0];
+		var blockHeight = grid.current[1] - grid.blockTemp[1];
+		var start = grid.blockTemp;
+		var end = grid.current;
+		if (blockLength < 0) {
+			var tmp = start[0];
+			start[0] = end[0];
+			end[0] = tmp;
+			blockLength = -blockLength;
+		}
+		if (blockHeight < 0) {
+			var tmp = start[1];
+			start[1] = end[1];
+			end[1] = tmp;
+			blockHeight = -blockHeight;
+		}
+		for (let x=0; x<=blockLength; x+=1) {
+			for (let y=0; y<=blockHeight; y+=1) {
+				var tempX = x+start[0];
+				var tempY = y+start[1];
+				if (state.array.length > 0) {
+					var tilePos = false;
+					for (let i=0; i<state.array.length; i+=1) {if (state.array[i][0] === tempX && state.array[i][1] === tempY) {tilePos = true;}}
+					if (tilePos === false) {grid.array[tempX][tempY][0] = tiles.array[menu.tileSelected]();}
+				} else {grid.array[tempX][tempY][0] = tiles.array[menu.tileSelected]();}
+			}
+		}
+		var name = grid.array[start[0]][start[1]][0].name
+		state.blocks.push([start[0],start[1],blockLength,blockHeight,name]);
+		grid.blockTemp = [];
+		grid.blockCorner = 0;
+		grid.display();
+		tiles.options();
+		grid.render();
+	}
+}
+grid.setFunc = function() {
+	grid.reset();
+	grid.showFunc();
+	document.getElementById("action").innerHTML = "Action: SET FUNCTION";
+	grid.func = function() {
+		var note = window.prompt("What should this function do?\n\n\n(do not include commas, equal signs, colons, or semicolons.)");;
+		var flag = false;
+		for (let i=0; i<state.tileFuncs.length; i+=1) {
+			if (state.tileFuncs[i][0] === grid.current[0] && state.tileFuncs[i][1] === grid.current[1]) {
+				state.tileFuncs[i][2] = note;
+				grid.array[grid.current[0]][grid.current[1]][1] = note;
+				flag = true;
+				break;
+			}
+		}
+		if (flag === false) {
+			state.tileFuncs.push([grid.current[0],grid.current[1],note]);
+			grid.array[grid.current[0]][grid.current[1]][1] = note;
+		}
+		grid.display();
+		grid.showFunc()
+	}
+}
+grid.setNPC = function() {
+	grid.reset();
+	npc.options();
+	document.getElementById("action").innerHTML = "Action: SET NPC";
+	grid.func = function() {
+		var name = npc.array[menu.npcSelected];
+		str = "You have selected a "+name+"\n\nWhat should this npc's level be? \n\n Shortcuts:\n< - up to 3 less than player level\n> - up to 3 more than player level\n^ - between 3 less and 3 more than player level";
+		var lvl = window.prompt(str);
+		var flag = false;
+		for (let i=0; i<state.npc.length; i+=1) {
+			if (state.npc[i][0] === grid.current[0] && state.npc[i][1] === grid.current[1]) {
+				state.npc[i][2] = name+"_"+lvl;
+				flag = true;
+				break;
+			}
+		}
+		if (flag === false) {state.npc.push([grid.current[0],grid.current[1],(name+"_"+lvl)]);}
+		grid.display();
+		npc.options();
+	}
+}
+grid.delRow = function() {
+	grid.reset();
+	grid.showRow();
+	document.getElementById("action").innerHTML = "Action: DELETE ROW";
+	grid.func = function() {
+		var tileFill = [];
+		var colFill = [];
+		var blockFill = [];
+		var rowNum;
+		for (let x=0; x<grid.X; x+=1) {
+			colFill.push(false);
+			tileFill.push(false);
+			blockFill.push(false);
+		}
+		for (let i=0; i<state.rows.length; i+=1) {
+			if (state.rows[i][0] === grid.current[1]) {
+				 rowNum = i; 
+				 break;
+			}
+		}
+		for (let i=0; i<state.blocks.length; i+=1) {
+			if (state.rows[rowNum][0] >= state.blocks[i][1] && state.rows[rowNum][0] <= state.blocks[i][1]+state.blocks[i][3]) {
+				for (let j=0; j<=state.blocks[i][3]; j+=1) {blockFill[state.blocks[i][0]+j] = true;}
+			}
+		}
+		for (let i=0; i<state.array.length; i+=1) {if (state.array[i][1] === state.rows[rowNum][0]) {tileFill[state.array[i][0]] = true;}}
+		for (let i=0; i<state.cols.length; i+=1) {colFill[state.cols[i][0]] = true;}
+		for (let i=0; i<tileFill.length; i+=1) {
+			if (tileFill[i] === false && blockFill[i] === false) {
+				if (colFill[i] === true) {
+					var colName = false;
+					for (let j=0; j<state.cols.length; j+=1) {if (state.cols[j][0] === i) {colName = state.cols[j][1];}}
+					grid.array[i][state.rows[rowNum][0]][0] = tiles.nameCheck(colName);
+				} else if (colFill[i] === false && tileFill[i] === false) {
+					grid.array[i][state.rows[rowNum][0]][0] = tiles.array[state.fill]();
+				}
+			}
+		}
+		grid.render();
+		state.rows.splice(rowNum,1);
+		tiles.options();
+		grid.display();
+	}
+}
+grid.delCol = function() {
+	grid.reset();
+	grid.showCol();
+	document.getElementById("action").innerHTML = "Action: DELETE COLUMN";
+	grid.func = function() {
+		var tileFill = [];
+		var rowFill = [];
+		var blockFill = [];
+		var colNum;
+		for (let y=0; y<grid.Y; y+=1) {
+			rowFill[y] = false;
+			tileFill[y] = false;
+			blockFill[y] = false;
+		}
+		for (let i=0; i<state.cols.length; i+=1) {
+			if (state.cols[i][0] === grid.current[0]) {
+				 colNum = i; 
+				 break;
+			}
+		}
+		for (let i=0; i<state.rows.length; i+=1) {rowFill[state.rows[i][0]] = true;}
+		for (let i=0; i<state.blocks.length; i+=1) {
+			if (state.cols[colNum][0] >= state.blocks[i][0] && state.cols[colNum][0] <= state.blocks[i][0]+state.blocks[i][2]) {
+				for (let j=0; j<=state.blocks[i][3]; j+=1) {blockFill[state.blocks[i][1]+j] = true;}
+			}
+		}
+		for (let i=0; i<state.array.length; i+=1) {
+			if (state.array[i][0] === state.cols[colNum][0]) {tileFill[state.array[i][1]] = true;}
+		}
+		for (let i=0; i<tileFill.length; i+=1) {
+			if (rowFill[i] === false && tileFill[i] === false && blockFill[i] === false) {
+				grid.array[state.cols[colNum][0]][i][0] = tiles.array[state.fill]();
+			}
+		}
+		grid.render();
+		state.cols.splice(colNum,1);
+		grid.showCol();
+		grid.display();
+	}
+}
+grid.delBlock = function() {
+	grid.reset();
+	grid.showBlock();
+	document.getElementById("action").innerHTML = "Action: DELETE BLOCK";
+	grid.func = function() {
+		var xFill = [];
+		var rowFill = [];
+		var yFill = [];
+		var colFill = [];
+		var tileFill = []
+		var blockNum;
+		for (let i=0; i<grid.X; i+=1) {xFill.push(false);}
+		for (let i=0; i<grid.Y; i+=1) {yFill.push(false);}
+		for (let i=0; i<state.blocks.length; i+=1) {
+			if (grid.current[0] >= state.blocks[i][0] && grid.current[0] <= state.blocks[i][0]+state.blocks[i][2]) {
+				 if (grid.current[1] >= state.blocks[i][1] && grid.current[1] <= state.blocks[i][1]+state.blocks[i][3]) {
+					blockNum = i; 
+					break;
+				}
+			}
+		}
+		for (let i=0; i<state.array.length; i+=1) {
+			if (state.array[i][0] >= state.blocks[blockNum][0] && state.array[i][0] <= state.blocks[blockNum][0]+state.blocks[blockNum][2]) {
+				if (state.array[i][1] >= state.blocks[blockNum][1] && state.array[i][1] <= state.blocks[blockNum][1]+state.blocks[blockNum][3]) {
+					xFill[state.array[i][0]] = state.array[i][2];
+					yFill[state.array[i][1]] = state.array[i][2];
+					tileFill.push(i)
+				}
+			}
+		}
+		for (let i=0; i<state.cols.length; i+=1) {
+			for (let j=0; j<state.blocks.length; j+=1) {
+				if (state.cols[i][0] >= state.blocks[j][0] && state.cols[i][0] <= state.blocks[j][0]+state.blocks[j][2]) {
+					colFill[state.cols[i][0]] = state.cols[i][1];
+				}
+			}
+		}
+		for (let i=0; i<state.rows.length; i+=1) {
+			for (let j=0; j<state.blocks.length; j+=1) {
+				if (state.rows[i][0] >= state.blocks[j][1] && state.rows[i][0] <= state.blocks[j][1]+state.blocks[j][3]) {
+					rowFill[state.rows[i][0]] = state.rows[i][1];
+				}
+			}
+		}
+		for (let x=0; x<=state.blocks[blockNum][2]; x+=1) {
+			for (let y=0; y<=state.blocks[blockNum][3]; y+=1) {
+				var tileName = false;
+				if (colFill[state.blocks[blockNum][0]+x]) {tileName = colFill[state.blocks[blockNum][0]+x];}
+				if (rowFill[state.blocks[blockNum][1]+y]) {tileName = rowFill[state.blocks[blockNum][1]+y];}
+				for (let i=0; i<tileFill.length; i+=1) {
+					if (state.array[tileFill[i]][0] === (state.blocks[blockNum][0]+x) && state.array[tileFill[i]][1] === (state.blocks[blockNum][1]+y)) {
+						tileName = state.array[tileFill[i]][2];
+					}
+				}
+				if (tileName === false) {grid.array[x+state.blocks[blockNum][0]][y+state.blocks[blockNum][1]][0] = tiles.array[state.fill]();}
+				else {grid.array[x+state.blocks[blockNum][0]][y+state.blocks[blockNum][1]][0] = tiles.nameCheck(tileName);}
+			}
+		}
+		grid.render();
+		state.blocks.splice(blockNum,1);
+		grid.showBlock();
+		grid.display();
+	}
+}
+grid.delFunc = function() {
+	grid.reset();
+	grid.showFunc();
+	document.getElementById("action").innerHTML = "Action: DELETE FUNC";
+	grid.func = function() {
+		for (let i=0; i<state.tileFuncs.length; i+=1) {
+			if (state.tileFuncs[i][0] === grid.current[0] && state.tileFuncs[i][1] === grid.current[1]) {
+				grid.array[grid.current[0]][grid.current[1]][1] = "";
+				state.tileFuncs.splice(i,1);
+				break;
+			}
+		}
+		grid.showFunc();
+		grid.display();
+	}
+}
+grid.delNPC = function() {
+	grid.reset();
+	grid.showNPC();
+	document.getElementById("action").innerHTML = "Action: DELETE NPC";
+	grid.func = function() {
+		for (let i=0; i<state.npc.length; i+=1) {
+			if (state.npc[i][0] === grid.current[0] && state.npc[i][1] === grid.current[1]) {
+				state.npc.splice(i,1);
+				break;
+			}
+		}
+		grid.showNPC();
+		grid.display();
+	}
+}
+grid.showRow = function() {
+	menu.func = grid.showRow
+	document.getElementById("tileList").innerHTML = "";
+	var selStyle = ' style="background: white; color: black;"';
+	var reg = " ";
+	grid.render();
+	for (let i=0; i<state.rows.length; i+=1) {
+		if (menu.selected === i) {
+			reg = selStyle;
+			var y = state.rows[i][0];
+			for (let x=0; x<grid.X; x+=1) {
+				document.getElementById("gridX"+x+"Y"+y).style = "background: yellow;"
+			}
+		}
+		document.getElementById("tileList").innerHTML += '<li'+reg+' onclick="menu.select('+i+')">Row: '+state.rows[i][0]+' Type: '+state.rows[i][1]+'</li>';
+		reg = " ";
+	}
+	grid.display();
+}
+grid.showCol = function() {
+	menu.func = grid.showCol
+	document.getElementById("tileList").innerHTML = "";
+	var selStyle = ' style="background: white; color: black;"';
+	var reg = " ";
+	grid.render();
+	for (let i=0; i<state.cols.length; i+=1) {
+		if (menu.selected === i) {
+			reg = selStyle;
+			var x = state.cols[i][0];
+			for (let y=0; y<grid.Y; y+=1) {
+				document.getElementById("gridX"+x+"Y"+y).style = "background: yellow;"
+			}
+		}
+		document.getElementById("tileList").innerHTML += '<li'+reg+' onclick="menu.select('+i+')">Col: '+state.cols[i][0]+' Type: '+state.cols[i][1]+'</li>';
+		reg = " ";
+	}
+	grid.display();
+}
+grid.showBlock = function() {
+	menu.func = grid.showBlock;
+	document.getElementById("tileList").innerHTML = "";
+	var selStyle = ' style="background: white; color: black;"';
+	var reg = " ";
+	grid.render();
+	for (let i=0; i<state.blocks.length; i+=1) {
+		if (menu.selected === i) {
+			reg = selStyle;
+			var l = state.blocks[i][2];
+			var h = state.blocks[i][3];
+			for (let x=0; x<=l; x+=1) {
+				for (let y=0; y<=h; y+=1) {
+					var X = state.blocks[i][0];
+					var Y = state.blocks[i][1];
+					document.getElementById("gridX"+(x+X)+"Y"+(y+Y)).style = "background: yellow;"
+				}
+			}
+		}
+		document.getElementById("tileList").innerHTML += '<li'+reg+' onclick="menu.select('+i+')">X: '+state.blocks[i][0]+' Y: '+state.blocks[i][1]+' Length: '+state.blocks[i][2]+' Height: '+state.blocks[i][3]+' Name: '+state.blocks[i][4]+'</li>';
+		reg = " ";
+	}
+	grid.display();
+}
+grid.showTiles = function() {
+	menu.func = grid.showTiles
+	document.getElementById("tileList").innerHTML = "";
+	var selStyle = ' style="background: white; color: black;"';
+	var reg = " ";
+	grid.render();
+	for (let i=0; i<state.array.length; i+=1) {
+		if (menu.selected === i) {
+			reg = selStyle;
+			var x = state.array[i][0];
+			var y = state.array[i][1];
+			document.getElementById("gridX"+x+"Y"+y).style = "background: yellow;"
+		}
+		document.getElementById("tileList").innerHTML += '<li'+reg+' onclick="menu.select('+i+')">'+state.array[i][2]+': X:'+state.array[i][0]+' Y:'+state.array[i][1]+'</li>';
+		reg = " ";
+	}
+	grid.display();
+}
+grid.showTrans = function() {
+	menu.func = grid.showTrans;
+	document.getElementById("tileList").innerHTML = "";
+	var selStyle = ' style="background: white; color: black;"';
+	var reg = " ";
+	grid.render();
+	for (let i=0; i<state.trans.length; i+=1) {
+		if (menu.selected === i) {
+			reg = selStyle;
+			var x = state.trans[i][0];
+			var y = state.trans[i][1];
+			document.getElementById("transX"+x+"Y"+y).style = "background: yellow;"
+		}
+		document.getElementById("tileList").innerHTML += '<li'+reg+' onclick="menu.select('+i+')">'+state.trans[i][2]+': X:'+state.trans[i][0]+' Y:'+state.trans[i][1]+'</li>';
+		reg = " ";
+	}
+	grid.display();
+}
+grid.showFunc = function() {
+	menu.func = grid.showFunc;
+	document.getElementById("tileList").innerHTML = "";
+	var selStyle = ' style="background: white; color: black;"';
+	var reg = " ";
+	grid.render();
+	for (let i=0; i<state.tileFuncs.length; i+=1) {
+		if (menu.selected === i) {
+			reg = selStyle;
+			var x = state.tileFuncs[i][0];
+			var y = state.tileFuncs[i][1];
+			document.getElementById("gridX"+x+"Y"+y).style = "background: yellow;"
+		}
+		document.getElementById("tileList").innerHTML += '<li'+reg+' onclick="menu.select('+i+')">X:'+state.tileFuncs[i][0]+' Y:'+state.tileFuncs[i][1]+'</li>';
+		reg = " ";
+	}
+	grid.display();
+}
+grid.showNPC = function() {
+	menu.func = grid.showNPC;
+	document.getElementById("tileList").innerHTML = "";
+	var selStyle = ' style="background: white; color: black;"';
+	var reg = " ";
+	grid.render();
+	for (let i=0; i<state.npc.length; i+=1) {
+		if (menu.selected === i) {
+			reg = selStyle;
+			var x = state.npc[i][0];
+			var y = state.npc[i][1];
+			document.getElementById("gridX"+x+"Y"+y).style = "background: yellow;"
+		}
+		document.getElementById("tileList").innerHTML += '<li'+reg+' onclick="menu.select('+i+')">NPC: '+state.npc[i][2]+' X:'+state.npc[i][0]+' Y:'+state.npc[i][1]+'</li>';
+		reg = " ";
+	}
+	grid.display();
+}
+grid.reset = function() {
+	document.getElementById("action").innerHTML = "Action: ";
+	grid.func = function() {};
+}
+grid.render = function() {
+	for (let x=0; x<grid.X; x+=1) {
+		for (let y=0; y<grid.Y; y+=1) {
+			var url = grid.array[x][y][0].url;
+			var offX = grid.array[x][y][0].x;
+			var offY = grid.array[x][y][0].y;
+			document.getElementById("gridX"+x+"Y"+y).style = "background-image: url("+url+"); "+tiles.adjust(offX,offY)+"; padding: 0; margins: 0;"
+			if (grid.array[x][y][2]) {
+				var transUrl = grid.array[x][y][2].url;
+				var transX = grid.array[x][y][2].x;
+				var transY = grid.array[x][y][2].y;
+				document.getElementById("transX"+x+"Y"+y).style = "background: rgba(0,0,0,0); background-image: url("+transUrl+"); "+trans.adjust(transX,transY)+";"
+			} else {document.getElementById("transX"+x+"Y"+y).style = "background: rgba(0,0,0,0);"}
+		}
+	}
+}
+grid.current = [0,0];
+
+var tiles = new Object();
+tiles.options = function() {
+	menu.func = tiles.options;
+	document.getElementById("tileList").innerHTML = "";
+	var list = [];
+	var selStyle = ' style="background: white; color: black;"';
+	var reg = " ";
+	for (let i=0; i<tiles.array.length; i+=1) {
+		list[i] = tiles.array[i]();
+		if (menu.tileSelected === i) {reg = selStyle;}
+		document.getElementById("tileList").innerHTML += '<li'+reg+' onclick="menu.tileSelect('+i+')">'+list[i].name+'</li>';
+		reg = " ";
+	}
+	var url = list[menu.tileSelected].url;
+	var offX = list[menu.tileSelected].x;
+	var offY = list[menu.tileSelected].y;
+	document.getElementById("display").style = "float: left; width: 100; height: 100; background-image: url("+url+"); background-position: "+(offX*-100.5)+" "+(offY*-100.5)+"; background-size: 100 100;";
+}
+tiles.nameCheck = function(n) {
+	for (let i=0; i<tiles.array.length; i+=1) {
+		var tmp = tiles.array[i]();
+		if (tmp.name === n) {return tiles.array[i]();}
+		delete tmp;
+	}
+}
+tiles.adjust = function(x,y) {
+	var adjX = x*10;
+	var adjY = y*10;
+	return "background-size: 1100% 1100%; background-position: "+adjX+"% "+adjY+"%; " 
+}
+tiles.tileset = function() {	var s = {	url: "DWI/tileset.png",	canWalk: false,	runScript: false	}; return s;};
+tiles.concrete = function()	 		{var t = tiles.tileset();	t.name = "concrete";		t.x = 2;	t.y = 0;	t.canWalk = true;	return t;}
+tiles.concreteWall = function() 	{var t = tiles.tileset();	t.name = "concreteWall";	t.x = 2;	t.y = 1;						return t;}
+tiles.dirt = function() 			{var t = tiles.tileset();	t.name = "dirt";			t.x = 1;	t.y = 0;	t.canWalk = true;	return t;}
+tiles.fence = function()	 		{var t = tiles.tileset();	t.name = "fence";			t.x = 4;	t.y = 1;						return t;}
+tiles.grass = function() 			{var t = tiles.tileset();	t.name = "grass";			t.x = 0;	t.y = 0;	t.canWalk = true;	return t;}
+tiles.leaves = function() 			{var t = tiles.tileset();	t.name = "leaves";			t.x = 1;	t.y = 1;	t.canWalk = true;	return t;}
+tiles.pebbles = function()			{var t = tiles.tileset();	t.name = "pebbles";			t.x = 2;	t.y = 2;	t.canWalk = true;	return t;}
+tiles.sandstone = function()		{var t = tiles.tileset();	t.name = "sandstone";		t.x = 1;	t.y = 2;	t.canWalk = true;	return t;}
+tiles.stone = function() 			{var t = tiles.tileset();	t.name = "stone";			t.x = 3;	t.y = 0;	t.canWalk = true;	return t;}
+tiles.stoneWall = function() 		{var t = tiles.tileset();	t.name = "stoneWall";		t.x = 3;	t.y = 1;						return t;}
+tiles.squares = function() 			{var t = tiles.tileset();	t.name = "squares";			t.x = 0;	t.y = 2;	t.canWalk = true;	return t;}
+tiles.water = function()	 		{var t = tiles.tileset();	t.name = "water";			t.x = 0;	t.y = 1;						return t;}
+tiles.wood = function()	 			{var t = tiles.tileset();	t.name = "wood";			t.x = 5;	t.y = 0;	t.canWalk = true;	return t;}
+tiles.woodFloor = function()	 	{var t = tiles.tileset();	t.name = "woodFloor";		t.x = 4;	t.y = 0;	t.canWalk = true;	return t;}
+tiles.woodWall = function()	 		{var t = tiles.tileset();	t.name = "woodWall";		t.x = 5;	t.y = 1;						return t;}
+tiles.black = function()	 		{var t = tiles.tileset();	t.name = "black";			t.x = 3;	t.y = 2;						return t;}
+tiles.carpet = function()	 		{var t = tiles.tileset();	t.name = "carpet";			t.x = 6;	t.y = 0;	t.canWalk = true;	return t;}
+tiles.carpetUp = function()			{var t = tiles.tileset();	t.name = "carpetUp";		t.x = 7;	t.y = 0;	t.canWalk = true;	return t;}
+tiles.carpetLeft = function()		{var t = tiles.tileset();	t.name = "carpetLeft";		t.x = 8;	t.y = 0;	t.canWalk = true;	return t;}
+tiles.carpetDown = function()	 	{var t = tiles.tileset();	t.name = "carpetDown";		t.x = 9;	t.y = 0;	t.canWalk = true;	return t;}
+tiles.carpetRight = function()	 	{var t = tiles.tileset();	t.name = "carpetRight";		t.x = 10;	t.y = 0;	t.canWalk = true;	return t;}
+tiles.screenLeft = function()	 	{var t = tiles.tileset();	t.name = "screenLeft";		t.x = 6;	t.y = 1;	t.canWalk = true;	return t;}
+tiles.screenMiddle = function()	 	{var t = tiles.tileset();	t.name = "screenMiddle";	t.x = 7;	t.y = 1;	t.canWalk = true;	return t;}
+tiles.screenRight = function()	 	{var t = tiles.tileset();	t.name = "screenRight";		t.x = 8;	t.y = 1;	t.canWalk = true;	return t;}
+tiles.fountain = function()	 		{var t = tiles.tileset();	t.name = "fountain";		t.x = 9;	t.y = 1;						return t;}
+tiles.barsBlank = function()		{var t = tiles.tileset();	t.name = "barsBlank";		t.x = 0;	t.y = 3;						return t;}
+tiles.barsHor1 = function()	 		{var t = tiles.tileset();	t.name = "barsHor1";		t.x = 1;	t.y = 3;						return t;}
+tiles.barsHor2 = function()	 		{var t = tiles.tileset();	t.name = "barsHor2";		t.x = 2;	t.y = 3;						return t;}
+tiles.barsHor3 = function()	 		{var t = tiles.tileset();	t.name = "barsHor3";		t.x = 3;	t.y = 3;						return t;}
+tiles.barsHor4 = function()	 		{var t = tiles.tileset();	t.name = "barsHor4";		t.x = 4;	t.y = 3;						return t;}
+tiles.barsVert1 = function()	 	{var t = tiles.tileset();	t.name = "barsVert1";		t.x = 5;	t.y = 3;						return t;}
+tiles.barsVert2 = function()	 	{var t = tiles.tileset();	t.name = "barsVert2";		t.x = 6;	t.y = 3;						return t;}
+tiles.barsVert3 = function()	 	{var t = tiles.tileset();	t.name = "barsVert3";		t.x = 7;	t.y = 3;						return t;}
+tiles.barsVert4 = function()	 	{var t = tiles.tileset();	t.name = "barsVert4";		t.x = 8;	t.y = 3;						return t;}
+tiles.array = [
+	tiles.concrete,tiles.concreteWall,tiles.dirt,tiles.fence,tiles.grass,tiles.leaves,tiles.pebbles,tiles.sandstone,tiles.stone,tiles.stoneWall,tiles.squares,
+	tiles.water,tiles.wood,tiles.woodFloor,tiles.woodWall,tiles.black,tiles.carpet,tiles.carpetUp,tiles.carpetLeft,tiles.carpetDown,tiles.carpetRight,tiles.screenLeft,
+	tiles.screenMiddle,tiles.screenRight,tiles.fountain,tiles.barsBlank,tiles.barsHor1,tiles.barsHor2,tiles.barsHor3,tiles.barsHor4,tiles.barsVert1,tiles.barsVert2,
+	tiles.barsVert3,tiles.barsVert4,
+];
+
+var trans = new Object()
+trans.options = function() {
+	menu.func = trans.options;
+	document.getElementById("tileList").innerHTML = "";
+	var list = [];
+	var selStyle = ' style="background: white; color: black;"';
+	var reg = " ";
+	for (let i=0; i<trans.array.length; i+=1) {
+		list[i] = trans.array[i]();
+		if (menu.transSelected === i) {reg = selStyle;}
+		document.getElementById("tileList").innerHTML += '<li'+reg+' onclick="menu.transSelect('+i+')">'+list[i].name+'</li>';
+		reg = " ";
+	}
+	var url = list[menu.transSelected].url;
+	var offX = list[menu.transSelected].x;
+	var offY = list[menu.transSelected].y;
+	document.getElementById("display").style = "float: left; width: 100; height: 100; background-image: url("+url+"); background-position: "+(offX*-100.5)+" "+(offY*-100.5)+"; background-size: 100 100;";
+}
+trans.nameCheck = function(n) {
+	for (let i=0; i<trans.array.length; i+=1) {
+		var tmp = trans.array[i]();
+		if (tmp.name === n) {return trans.array[i]();}
+		delete tmp;
+	}
+}
+trans.adjust = function(x,y) {
+	var adjX = x*10;
+	var adjY = y*10;
+	return "background-size: 100 100; background-position: "+adjX+"% "+adjY+"%; "
+}
+trans.tileset = function() 			{var s = {url: "DWI/trans.png", canWalk: false, runScript: false}; return s;};
+trans.house = function()			{var t = trans.tileset();	t.name = "house";				t.x = 0;	t.y = 0;						return t;}
+trans.house2 = function()			{var t = trans.tileset();	t.name = "house2";				t.x = 0;	t.y = 1;						return t;}
+trans.house3 = function()			{var t = trans.tileset();	t.name = "house3";				t.x = 0;	t.y = 2;						return t;}
+trans.tripleHouse1 = function()		{var t = trans.tileset();	t.name = "tripleHouse1";		t.x = 1;	t.y = 1;						return t;}
+trans.tripleHouse2 = function()		{var t = trans.tileset();	t.name = "tripleHouse2";		t.x = 2;	t.y = 1;						return t;}
+trans.tripleHouse3 = function()		{var t = trans.tileset();	t.name = "tripleHouse3";		t.x = 3;	t.y = 1;						return t;}
+trans.shop = function()				{var t = trans.tileset();	t.name = "shop";				t.x = 1;	t.y = 0;						return t;}
+trans.bank = function()				{var t = trans.tileset();	t.name = "bank";				t.x = 2;	t.y = 0;						return t;}
+trans.safe = function()				{var t = trans.tileset();	t.name = "safe";				t.x = 3;	t.y = 0;	t.canWalk = true;	return t;}
+trans.arena = function()			{var t = trans.tileset();	t.name = "arena";				t.x = 4;	t.y = 0;						return t;}
+trans.table = function()			{var t = trans.tileset();	t.name = "table";				t.x = 1;	t.y = 5;						return t;}
+trans.tableTop = function()			{var t = trans.tileset();	t.name = "tableTop";			t.x = 0;	t.y = 3;						return t;}
+trans.tableCenter = function()		{var t = trans.tileset();	t.name = "tableCenter";			t.x = 0;	t.y = 4;						return t;}
+trans.tableBottom = function()		{var t = trans.tileset();	t.name = "tableBottom";			t.x = 0;	t.y = 5;						return t;}
+trans.tableLeft = function()		{var t = trans.tileset();	t.name = "tableLeft";			t.x = 0;	t.y = 6;						return t;}
+trans.tableMiddle = function()		{var t = trans.tileset();	t.name = "tableMiddle";			t.x = 1;	t.y = 6;						return t;}
+trans.tableRight = function()		{var t = trans.tileset();	t.name = "tableRight";			t.x = 2;	t.y = 6;						return t;}
+trans.hole = function()				{var t = trans.tileset();	t.name = "hole";				t.x = 5;	t.y = 0;	t.canWalk = true;	return t;}
+trans.ladder = function()			{var t = trans.tileset();	t.name = "ladder";				t.x = 6;	t.y = 0;	t.canWalk = true;	return t;}
+trans.boat = function()				{var t = trans.tileset();	t.name = "boat";				t.x = 7;	t.y = 0;						return t;}
+trans.ship1 = function()			{var t = trans.tileset();	t.name = "ship1";				t.x = 8;	t.y = 0;						return t;}
+trans.ship2 = function()			{var t = trans.tileset();	t.name = "ship2";				t.x = 9;	t.y = 0;						return t;}
+trans.ship3 = function()			{var t = trans.tileset();	t.name = "ship3";				t.x = 10;	t.y = 0;						return t;}
+trans.tree1 = function()			{var t = trans.tileset();	t.name = "tree1";				t.x = 5;	t.y = 1;						return t;}
+trans.tree2 = function()			{var t = trans.tileset();	t.name = "tree2";				t.x = 6;	t.y = 1;						return t;}
+trans.stairRight = function()		{var t = trans.tileset();	t.name = "stairRight";			t.x = 7;	t.y = 1;	t.canWalk = true;	return t;}
+trans.stairDown = function()		{var t = trans.tileset();	t.name = "stairDown";			t.x = 8;	t.y = 1;	t.canWalk = true;	return t;}
+trans.stairLeft = function()		{var t = trans.tileset();	t.name = "stairLeft";			t.x = 9;	t.y = 1;	t.canWalk = true;	return t;}
+trans.stairUp = function()			{var t = trans.tileset();	t.name = "stairUp";				t.x = 10;	t.y = 1;	t.canWalk = true;	return t;}
+trans.door1Up = function()			{var t = trans.tileset();	t.name = "door1Up";				t.x = 6;	t.y = 2;						return t;}
+trans.door1Right = function()		{var t = trans.tileset();	t.name = "door1Right";			t.x = 6;	t.y = 3;						return t;}
+trans.door1Down = function()		{var t = trans.tileset();	t.name = "door1Down";			t.x = 6;	t.y = 4;						return t;}
+trans.door1Left = function()		{var t = trans.tileset();	t.name = "door1Left";			t.x = 6;	t.y = 5;						return t;}
+trans.door2Up = function()			{var t = trans.tileset();	t.name = "door2Up";				t.x = 5;	t.y = 2;						return t;}
+trans.door2Right = function()		{var t = trans.tileset();	t.name = "door2Right";			t.x = 5;	t.y = 3;						return t;}
+trans.door2Down = function()		{var t = trans.tileset();	t.name = "door2Down";			t.x = 5;	t.y = 4;						return t;}
+trans.door2Left = function()		{var t = trans.tileset();	t.name = "door2Left";			t.x = 5;	t.y = 5;						return t;}
+trans.torchGround = function()		{var t = trans.tileset();	t.name = "torchGround";			t.x = 4;	t.y = 1;	t.canWalk = true;	return t;}
+trans.torchUp = function()			{var t = trans.tileset();	t.name = "torchUp";				t.x = 4;	t.y = 2;						return t;}
+trans.torchRight = function()		{var t = trans.tileset();	t.name = "torchRight";			t.x = 4;	t.y = 3;						return t;}
+trans.torchDown = function()		{var t = trans.tileset();	t.name = "torchDown";			t.x = 4;	t.y = 4;						return t;}
+trans.torchLeft = function()		{var t = trans.tileset();	t.name = "torchLeft";			t.x = 4;	t.y = 5;						return t;}
+trans.catBoxUp = function()			{var t = trans.tileset();	t.name = "catBoxUp";			t.x = 10;	t.y = 1;	t.canWalk = true;	return t;}
+trans.catBoxRight = function()		{var t = trans.tileset();	t.name = "catBoxRight";			t.x = 7;	t.y = 1;	t.canWalk = true;	return t;}
+trans.catBoxDown = function()		{var t = trans.tileset();	t.name = "catBoxDown";			t.x = 8;	t.y = 1;	t.canWalk = true;	return t;}
+trans.catBoxLeft = function()		{var t = trans.tileset();	t.name = "catBoxLeft";			t.x = 9;	t.y = 1;	t.canWalk = true;	return t;}
+trans.chair = function()			{var t = trans.tileset();	t.name = "chair";				t.x = 2;	t.y = 2;	t.canWalk = true;	return t;}
+trans.throne = function()			{var t = trans.tileset();	t.name = "throne";				t.x = 2;	t.y = 3;	t.canWalk = true;	return t;}
+trans.couch = function()			{var t = trans.tileset();	t.name = "couch";				t.x = 2;	t.y = 4;	t.canWalk = true;	return t;}
+trans.bed = function()				{var t = trans.tileset();	t.name = "bed";					t.x = 2;	t.y = 5;	t.canWalk = true;	return t;}
+trans.barrel = function()			{var t = trans.tileset();	t.name = "barrel";				t.x = 1;	t.y = 2;	t.canWalk = true;	return t;}
+trans.fenceLeft = function()		{var t = trans.tileset();	t.name = "fenceLeft";			t.x = 0;	t.y = 7;						return t;}
+trans.fenceMiddle = function()		{var t = trans.tileset();	t.name = "fenceMiddle";			t.x = 2;	t.y = 7;						return t;}
+trans.fenceRight = function()		{var t = trans.tileset();	t.name = "fenceRight";			t.x = 4;	t.y = 7;						return t;}
+trans.fenceBottomLeft = function()	{var t = trans.tileset();	t.name = "fenceBottomLeft";		t.x = 5;	t.y = 7;						return t;}
+trans.fenceBottomRight = function()	{var t = trans.tileset();	t.name = "fenceBottomRight";	t.x = 6;	t.y = 7;						return t;}
+trans.fenceTopLeft = function()		{var t = trans.tileset();	t.name = "fenceTopLeft";		t.x = 7;	t.y = 7;						return t;}
+trans.fenceTopMiddle = function()	{var t = trans.tileset();	t.name = "fenceTopMiddle";		t.x = 8;	t.y = 7;						return t;}
+trans.fenceTopRight = function()	{var t = trans.tileset();	t.name = "fenceTopRight";		t.x = 9;	t.y = 7;						return t;}
+trans.fencePostRight = function()	{var t = trans.tileset();	t.name = "fencePostRight";		t.x = 10;	t.y = 6;						return t;}
+trans.fencePostLeft = function()	{var t = trans.tileset();	t.name = "fencePostLeft";		t.x = 10;	t.y = 7;						return t;}
+trans.fenceGateClosed = function()	{var t = trans.tileset();	t.name = "fenceGateClosed";		t.x = 1;	t.y = 7;						return t;}
+trans.fenceGateOpen = function()	{var t = trans.tileset();	t.name = "fenceGateOpen";		t.x = 3;	t.y = 7;						return t;}
+trans.vendPurpleUp = function()		{var t = trans.tileset();	t.name = "vendPurpleUp";		t.x = 7;	t.y = 2;	t.canWalk = true;	return t;}
+trans.vendPurpleRight = function()	{var t = trans.tileset();	t.name = "vendPurpleRight";		t.x = 7;	t.y = 3;	t.canWalk = true;	return t;}
+trans.vendPurpleDown = function()	{var t = trans.tileset();	t.name = "vendPurpleDown";		t.x = 7;	t.y = 4;	t.canWalk = true;	return t;}
+trans.vendPurpleLeft = function()	{var t = trans.tileset();	t.name = "vendPurpleLeft";		t.x = 7;	t.y = 5;	t.canWalk = true;	return t;}
+trans.vendGreenUp = function()		{var t = trans.tileset();	t.name = "vendGreenUp";			t.x = 8;	t.y = 2;	t.canWalk = true;	return t;}
+trans.vendGreenRight = function()	{var t = trans.tileset();	t.name = "vendGreenRight";		t.x = 8;	t.y = 3;	t.canWalk = true;	return t;}
+trans.vendGreenDown = function()	{var t = trans.tileset();	t.name = "vendGreenDown";		t.x = 8;	t.y = 4;	t.canWalk = true;	return t;}
+trans.vendGreenLeft = function()	{var t = trans.tileset();	t.name = "vendGreenLeft";		t.x = 8;	t.y = 5;	t.canWalk = true;	return t;}
+trans.vendRedUp = function()		{var t = trans.tileset();	t.name = "vendRedUp";			t.x = 9;	t.y = 2;	t.canWalk = true;	return t;}
+trans.vendRedRight = function()		{var t = trans.tileset();	t.name = "vendRedRight";		t.x = 9;	t.y = 3;	t.canWalk = true;	return t;}
+trans.vendRedDown = function()		{var t = trans.tileset();	t.name = "vendRedDown";			t.x = 9;	t.y = 4;	t.canWalk = true;	return t;}
+trans.vendRedLeft = function()		{var t = trans.tileset();	t.name = "vendRedLeft";			t.x = 9;	t.y = 5;	t.canWalk = true;	return t;}
+trans.vendBlueUp = function()		{var t = trans.tileset();	t.name = "vendBlueUp";			t.x = 10;	t.y = 2;	t.canWalk = true;	return t;}
+trans.vendBlueRight = function()	{var t = trans.tileset();	t.name = "vendBlueRight";		t.x = 10;	t.y = 3;	t.canWalk = true;	return t;}
+trans.vendBlueDown = function()		{var t = trans.tileset();	t.name = "vendBlueDown";		t.x = 10;	t.y = 4;	t.canWalk = true;	return t;}
+trans.vendBlueLeft = function()		{var t = trans.tileset();	t.name = "vendBlueLeft";		t.x = 10;	t.y = 5;	t.canWalk = true;	return t;}
+trans.array = [
+	trans.house,trans.house2,trans.tripleHouse1,trans.tripleHouse2,trans.tripleHouse3,trans.shop,trans.bank,trans.safe,trans.arena,trans.table,trans.tableTop,
+	trans.tableCenter,trans.tableBottom,trans.tableLeft,trans.tableMiddle,trans.tableRight,trans.hole,trans.ladder,trans.boat,trans.ship1,trans.ship2,trans.ship3,
+	trans.tree1,trans.tree2,trans.stairRight,trans.stairDown,trans.stairLeft,trans.stairUp,trans.door1Up,trans.door1Right,trans.door1Down,trans.door1Left,trans.door2Up,
+	trans.door2Right,trans.door2Down,trans.door2Left,trans.torchGround,trans.torchUp,trans.torchRight,trans.torchDown,trans.torchLeft,trans.catBoxUp,trans.catBoxRight,
+	trans.catBoxDown,trans.catBoxLeft,trans.chair,trans.throne,trans.couch,trans.bed,trans.barrel,trans.fenceLeft,trans.fenceMiddle,trans.fenceRight,
+	trans.fenceBottomLeft,trans.fenceBottomRight,trans.fenceTopLeft,trans.fenceTopMiddle,trans.fenceTopRight,trans.fencePostRight,trans.fencePostLeft,
+	trans.fenceGateClosed,trans.fenceGateOpen,trans.vendPurpleUp,trans.vendPurpleRight,trans.vendPurpleDown,trans.vendPurpleLeft,trans.vendGreenUp,trans.vendGreenRight,
+	trans.vendGreenDown,trans.vendGreenLeft,trans.vendRedUp,trans.vendRedRight,trans.vendRedDown,trans.vendRedLeft,trans.vendBlueUp,trans.vendBlueRight,
+	trans.vendBlueDown,trans.vendBlueLeft
+];
+
+//	lvlName=xScv ;fill=0;gridX=12;gridY=12;trans0=x:4,y:2,name:fenceMiddle;trans1=x:6,y:2,name:fenceMiddle;trans2=x:8,y:2,name:fenceMiddle;trans3=x:3,y:2,name:fenceBottomLeft;trans4=x:9,y:2,name:fenceBottomRight;trans5=x:9,y:6,name:fenceTopRight;trans6=x:3,y:6,name:fenceTopLeft;trans7=x:5,y:2,name:fenceGateOpen;trans8=x:7,y:2,name:fenceGateClosed;trans9=x:3,y:5,name:fencePostLeft;trans10=x:3,y:4,name:fencePostLeft;trans11=x:3,y:3,name:fencePostLeft;trans12=x:9,y:3,name:fencePostRight;trans13=x:9,y:4,name:fencePostRight;trans14=x:9,y:5,name:fencePostRight;
+
+var npc = {
+	array: [
+		"Goblin","Palace Guard","Giant Rat","Giant Spider","Frost Spider","Wizard","Baby Dragon","Wolf","Donkey Kong","Charizard","Obi Wan Shinobi","Ganondorf","Link",
+		"Tanjiro","Ulfric Stormcloak","Mr. Meeseeks"
+	],
+	options: function() {
+		menu.func = npc.options;
+		document.getElementById("tileList").innerHTML = "";
+		var list = [];
+		var selStyle = ' style="background: white; color: black;"';
+		var reg = " ";
+		for (let i=0; i<npc.array.length; i+=1) {
+			list[i] = npc.array[i];
+			if (menu.npcSelected === i) {reg = selStyle;}
+			document.getElementById("tileList").innerHTML += '<li'+reg+' onclick="menu.npcSelect('+i+')">'+list[i]+'</li>';
+			reg = " ";
+		}
+	}
+}
+
+</script>
+</body>
+</html>
