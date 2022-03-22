@@ -1,0 +1,201 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+</head>
+<body>
+<div id="world"></div>
+<div id="start" class="start">
+	<div id="loadSaveStart" class="loadSaveStart">
+		<button class="startBtns" onclick="state.testWorld();">Test Level</button>
+		<button class="startBtns" onclick="menu.loadChar();">Load Game</button>
+		<button class="startBtns" onclick="menu.createChar();">New Game</button>
+	</div>
+	<div id="selectRace" style="display: none;" class="selectRace">
+		Choose Your Race:<br>
+		<button class="startBtns" onclick="menu.human();">Human</button>
+		<button class="startBtns" onclick="menu.elf();">Elf</button><br><br>
+		<button class="startBtns" onclick="menu.orc();">Orc</button>
+		<button class="startBtns" onclick="menu.dwarf();">Dwarf</button>
+	</div>
+	<div id="selectClass" style="display: none;" class="selectClass">
+		Choose Your Class:<br>
+		<button class="startBtns" onclick="menu.warrior();">Warrior</button>
+		<button class="startBtns" onclick="menu.mage();">Mage</button><br><br>
+		<button class="startBtns" onclick="menu.rogue();">Rogue</button>
+		<button class="startBtns" onclick="menu.paladin();">Paladin</button>
+	</div>
+</div>
+<div id="sidebar"></div>
+<div id="menu"><br/>
+	<div id="menuTitle">INVENTORY</div>
+	<div style="height: 115;">
+		<button id="listItems" onclick="display.loadInventory();" class="listButtons">Inventory</button>
+		<button id="listWeapons" onclick="display.loadWeapons();" class="listButtons">Weapons</button>
+		<button id="listArmor" onclick="display.loadArmor();" class="listButtons">Armor</button>
+		<button id="listSpells" onclick="display.loadEffectSpells();" class="listButtons">Spells</button>
+		<button id="listQuests" onclick="display.loadQuests();" class="listButtons">Quests</button>
+		<button id="listButtons" onclick="display.loadButtons();" style="display: none" class="listButtons">Buttons</button>
+		<button id="listStats" onclick="display.loadStats();" class="listButtons">Stats</button>
+		<br>
+		<br>
+		<button id="useItem" onclick="useItem();" style="display: none;" class="gameListButtons">Use Item</button>
+		<button id="removeItem" onclick="dropStuffThru(player.items, player.itemsQuantity, 0);" style="display: none;" class="gameListButtons">Drop Item</button>
+		<button id="checkItemInfo" onclick="checkInfo('item', false);" style="display: none;" class="gameListButtons">Check Item Info</button>
+		<button id="equipWeapon" onclick="equipStuff(0);" style="display: none;" class="gameListButtons">Equip Weapon</button>
+		<button id="removeWeapon" onclick="dropStuffThru(player.weapons, player.weaponsQuantity, 1);" style="display: none;" class="gameListButtons">Drop Weapon</button>
+		<button id="checkWeaponInfo" onclick="checkInfo('weapon', false);" style="display: none;" class="gameListButtons">Check Weapon Info</button>
+		<button id="equipArmor" onclick="equipStuff(1);" style="display: none;" class="gameListButtons">Equip Armor</button>
+		<button id="removeArmor" onclick="dropStuffThru(player.armor, player.armorQuantity, 2);" style="display: none;" class="gameListButtons">Drop Armor</button>
+		<button id="checkArmorInfo" onclick="checkInfo('armor', false);" style="display: none;" class="gameListButtons">Check Armor Info</button>
+		<button id="listEffectSpells" onclick="display.loadEffectSpells();" style="display: none;" class="gameListButtons">Show Effect Spells</button>
+		<button id="listAttackSpells" onclick="display.loadAttackSpells();" style="display: none;" class="gameListButtons">Show Attack Spells</button>
+		<button id="checkAttackSpellInfo" onclick="checkInfo('attack spell', false);" style="display: none;" class="gameListButtons">Check Spell Info</button>
+		<button id="checkEffectSpellInfo" onclick="checkInfo('effect spell', false);" style="display: none;" class="gameListButtons">Check Spell Info</button>
+		<button id="castSpell" onclick="castSpell();" style="display: none;" class="gameListButtons">Cast Spell</button>
+		<button id="checkQuest" onclick="checkInfo('quest', false);" style="display: none;" class="gameListButtons">Check Quest</button>
+	</div>
+	<ol id="gameList"></ol>
+	<div id="stats">
+		<button id="load" onclick="menu.loadChar();">Load</button>
+		<button id="save" onclick="menu.saveChar();">Save</button>
+		<button id="newChar" onclick="menu.createChar();">New Character</button>
+		<br>
+		<table>Combat Stats
+			<tr><td class="stat">Name: </td>			<td id="name" class="stat">Stat</td></tr>
+			<tr><td class="stat">Level: </td>			<td id="level" class="stat">Stat</td></tr>
+			<tr><td class="stat">Health: </td>			<td id="health" class="stat">Stat</td></tr>
+			<tr><td class="stat">Manna: </td>			<td id="manna" class="stat">Stat</td></tr>
+			<tr><td class="stat">Status: </td>			<td id="status" class="stat">Stat</td></tr>
+			<tr><td class="stat">XP: </td>				<td id="experience" class="stat">Stat</td></tr>
+			<tr><td class="stat">Next Level XP: </td>	<td id="nextLevel" class="stat">Stat</td></tr>
+			<tr><td class="stat">Race/Class: </td>		<td id="raceClass" class="stat">Stat</td></tr>
+			<tr><td class="stat">Strength: </td>		<td id="strength" class="stat">Stat</td></tr>
+			<tr><td class="stat">Dexterity: </td>		<td id="dexterity" class="stat">Stat</td></tr>
+			<tr><td class="stat">IQ: </td>				<td id="IQ" class="stat">Stat</td></tr>
+			<tr><td class="stat">Defense: </td>			<td id="defense" class="stat">Stat</td></tr>
+			<tr><td class="stat">Armor Class: </td>		<td id="armorClass" class="stat">Stat</td></tr>
+			<tr><td class="stat">Gold: </td>			<td id="gold" class="stat">0</td></tr>
+		</table>
+		<button onclick="viewLog()">LOG</button>
+		<button onclick="resetLog()">RESET LOG</button>
+		<button onclick="evalFunc()">EVAL</button>
+	</div>
+	<div id="options"style="float: left; width: 100%; display: none;"></div>
+</div>
+<div id="footer"></div>
+<div id="filter"></div>
+<div id="player" style="position: absolute; left: 520; bottom: 320; width: 20; height: 40; z-index: 5;"></div>
+<div id="npcElements" style="display: block;"></div>
+
+<div id="message" class="message">Press "E" to enter. </div>
+<div id="questMessage" class="questMessage">Quest Update: </div>
+<div id="title"></div>
+<div id="battle" style="display: none;" class="battle">
+	<div id="battleScene" class="battleScene">
+		<div id="enemyHealthBarBack" style="position: relative; left: 0; width: 200; height: 20; background: black; z-index: 10;"></div>
+		<div id="enemyMannaBarBack" style="position: relative; left: 0; top: 30; width: 200; height: 20; background: black; z-index: 10;"></div>
+		<div id="enemyHealthBar" class="enemyHealth"></div>
+		<div id="enemyMannaBar" class="enemyManna"></div>
+		<p id="enemyImg" class="enemyImg" style="background-position: -300 0"></p>
+		<p id="playerImg" class="playerImg" style="background-position: 0 0"></p>
+	</div>
+	<div id="battlePrompt" class="battlePrompt"></div>
+	<div id="particles"></div>
+</div>
+
+<div id="healthBarBack" class="backBar" style="display: none"></div>
+<div id="mannaBarBack" class="backBar" style="display: none"></div>
+<div id="healthBar" class="healthBar" style="display: none"></div>
+<div id="mannaBar" class="mannaBar" style="display: none"></div>
+
+<div id="storePopUp" style="display: none;" class="storePopUp">
+	<div id="storePrompt" style="background: blue; height: 12%; width: 100%; font-weight: 800; font-size: 18;">
+		What would you like to buy or sell?
+	</div>
+	<div id="storeButtons" style="text-align: center; background: blue; width: 100%; height: 10%">
+		<button id="shopCheckItem" onclick="checkInfo('item', true);" style="display: none">Check Item</button>
+		<button id="shopCheckWeapon" onclick="checkInfo('weapon', true);" style="display: none">Check Weapon</button>
+		<button id="shopCheckArmor" onclick="checkInfo('armor', true);">Check Armor</button>
+		<button id="depositGold" onclick="depositGold()">Deposit Gold</button>
+		<button id="withdrawGold"onclick="withdrawGold()">Withdraw Gold</button>
+		<button onclick="exitShop();">Exit</button>
+		<br/>
+		<button id="listShopItems" onclick="loadShopInventory();">Inventory</button>
+		<button id="listShopWeapons" onclick="loadShopWeapons();">Weapons</button>
+		<button id="listShopArmor" onclick="loadShopArmor();">Armor</button>
+	</div>
+	<div id="storeLists" style="width: 100%;">
+		<div id="storeInfo" style="float: left;" class="storeInfo">
+			<div id="sellItems">INFO</div><br>
+			<div id="infoTitle">Click on the "Check Info" button above and then click on the item you would like info on.</div><br>
+		</div>
+		<ol id="storeBuy" style="float: right;" class="storeItems">
+			<div id="buyItems">Merchant</div><br>
+			<div id="shopListTitle">INVENTORY</div><br>
+		</ol>
+		<div id="playerGold" style="float: left; font-weight: 800; font-size: 18; padding-left: 30px">Gold: Stat</div>
+		<div id="shopGold" style="float: right; font-weight: 800; font-size: 18; padding-right: 30px">Gold: Stat</div>
+	</div>
+</div>
+
+<div id="log"></div>
+
+<div id="inputDiv" style="display: none">
+	<input type="file" name="inputFile" id="inputFile"><br>
+	<input type="button" id="loadFile" value="Load File">
+</div>
+<div id="saveDiv" style="display: none">
+	<input type="text" name="fileName" id="exportFileName"><br>
+	<button id="download">Save File</button>
+</div>
+
+<style>
+	p {width: 100; height: 100; background: black; padding: 0; margin: 0; }
+	div {float: left;}
+	button {font-size: 12;}
+	
+	.options {position: relative; width: 350; text-align: left; margin: 5 0 5 0;}
+	.listitems {display: listitem; background: rgba(0,0,0,0.5); color: white; height: 25; margin: 5 15 5 0; font-size: 12;}
+	.listitems:hover {background: rgba(128,128,128,0.5); }
+	.listitems:active {background: rgba(255,255,255,0.5); color: lightgray;}
+	.storePopUp {background: blue; bottom: 40; left: 70; width: 920; height: 500; position: fixed; z-index: 10;}
+	.storeItems {background: red; font-size: 18px; font-weight: 600; width: 40%; height: 300px; overflow-x: hidden; overflow-y: scroll; margin: 0px; padding: 30px;}
+	.storeInfo {background: red; font-size: 18px; font-weight: 600; width: 40%; height: 300px; margin: 0px; padding: 30px;}
+	.listButtons {width: 32%;}
+	.gameListButtons {width: 49%; padding: 0; margin: 0; display: button;}
+	.message {position: absolute; left:100; bottom: 50; background: rgba(0,0,0,0.8); color: rgb(255,255,255); font-size: 26; display: none;}
+	.questMessage {position: absolute; height: 200; width: 500; left:300; bottom: 200; background: rgba(0,0,0,0.6); color: rgb(255,255,255); font-size: 30; z-index: 10; display: none;}
+	.start {position: absolute; bottom: 20; left: 20; width: 1330; height: 570; overflow: hidden; background-image: url("DWI/title.png"); background-size: cover; z-index: 10; }
+	.loadSaveStart {position: relative; width: 100%; text-align: center; top: 420;}
+	.selectRace {position: relative; width: 100%; text-align: center; top: 360; font-size: 30; font-weight: 800; color: white;}
+	.selectClass {position: relative; width: 100%; text-align: center; top: 360; font-size: 30; font-weight: 800; color: white;}
+	.stat {border: solid; border-width: 1; width: 200; background: yellowgreen; font-weight: 800;}
+	.startBtns {width: 10%; height: 60; font-size: 20; font-weight: 600;}
+	.battle {position: absolute; bottom: 40; left: 70; width: 920; height: 500; background: black; z-index: 10;}
+	.battleScene {position: absolute; bottom: 140; left: 20; width: 880; height: 340; background: darkred; z-index: 10;}
+	.battlePrompt {position: absolute; bottom: 20; left: 20; width: 880; height: 100; background: darkred; color: white; font-size: 18; z-index: 10;}
+	.healthBar {position: relative; bottom: 0; left: 0; width: 200; height: 20; background: red; z-index: 10;}
+	.mannaBar {position: relative; bottom: 0; left: 0; width: 200; height: 20; background: blue; z-index: 10;}
+	.backBar {position: relative; left: 0; width: 200; height: 20; background: black; z-index: 10;}
+	.enemyHealth {position: relative; bottom: 0; right: 0; width: 200; height: 20; background: red;}
+	.enemyManna {position: relative; bottom: 0; right: 0; width: 200; height: 20; background: blue;}
+	.enemyImg {position: relative; float: right; width: 150; height: 250; top: 75; right: 100; background: rgba(0,0,0,0); background-image: url('DWI/battleSet.png'); background-size: 150 250;}
+	.playerImg {position: relative; float: left; width: 150; height: 250; top: 75; left: 100; background: rgba(0,0,0,0); background-image: url("DWI/battleSet.png"); background-size: 150 250;}
+	
+	#player {background-image: url("DWI/player.png"); }
+	#world {position: absolute; bottom: 20; left: 20; width: 1320; height: 570; overflow: hidden; background: clear; }
+	#menu {position: absolute; bottom: 20; left: 990; width: 350; height: 570; background: azure; padding: 0 5 0 5; z-index: 5}
+	#gameList {font-weight: 600; width: 95%; height: 400px; float: right; overflow-x: hidden; overflow-y: scroll; margin: 0px; padding: 0px;}
+	#menuTitle {font-size: 20; font-weight: 600; width: 100%; height: 30px; margin: 0px; padding: 0px;}
+	#stats {font-size: 14px; font-weight: 600; width: 100%; height: 340px; display: none;}
+	#sidebar {position: absolute; bottom: 20; left: 20; width: 50; height: 570; background: azure; z-index: 5}
+	#title {position: absolute; bottom: 540; left: 70; width: 920; height: 50; background: azure; z-index: 5}
+	#footer {position: absolute; bottom: 20; left: 70; width: 920; height: 20; background: azure; z-index: 5}
+	#filter {position: absolute; bottom: 40; left: 70; width: 920; height: 500; background: rgba(0,0,0,0); z-index: 6; }
+	#log {position: absolute; bottom: 20; left: 20; width: 1320; height: 570; overflow-y: scroll; background: white; z-index: 10; display: none;}
+	#inputDiv {background: gray; position: relative; width: 200; height: 100; left: 50%; top: 50%; z-index: 10;}
+	#saveDiv {background: gray; position: relative; width: 200; height: 100; left: 50%; top: 50%; z-index: 30;}
+</style>
+<script src="Dungeon Wars.js"></script>
+</body>
+</html>
